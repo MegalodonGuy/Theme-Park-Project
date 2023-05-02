@@ -23,6 +23,10 @@ public class GamePlay implements KeyListener{
     private Timer timer = new Timer(20, this::checkTime);
     private JTextField inputField;
     private JLabel dialogLabel;
+    private int dialogScrollNum=1; 
+    private String dialog1 = "Welcome to your first day";
+
+
     private String currentDialog; 
     public GamePlay() {
         timer.start(); 
@@ -38,7 +42,7 @@ public class GamePlay implements KeyListener{
         frame.setIconImage(icon.getImage());
 
         //set up dialog text line
-        dialogLabel = new JLabel("Welcome to your first day ");
+        dialogLabel = new JLabel("");
         dialogLabel.setHorizontalAlignment(SwingConstants.CENTER);
         dialogLabel.setVerticalAlignment(SwingConstants.CENTER);
         Dimension size = dialogLabel.getPreferredSize();
@@ -54,9 +58,10 @@ public class GamePlay implements KeyListener{
         inputField.setBounds(50, 50, 150, 0);
         
         //add to frame
-        frame.add(inputField);
+        //frame.add(inputField);
         frame.add(dialogLabel);
         frame.getContentPane().setBackground(new Color(191,231,233));
+        frame.addKeyListener(this);
 
         layout.putConstraint(SpringLayout.WEST, dialogLabel,500,SpringLayout.WEST,inputField);
 
@@ -68,29 +73,30 @@ public class GamePlay implements KeyListener{
 
     private void checkTime(ActionEvent evt){
         dialogLabel.setText(currentDialog);
+        switch (dialogScrollNum){
+            case 1:
+            currentDialog= dialog1;
+            break;
+            case 2:
+            currentDialog=(""+dialogScrollNum);
+            break;
+        }
     }
 
     public void keyPressed(KeyEvent e) {
-       // System.out.println("Pressed: " + e.getKeyChar());
-        //this.keyPressLabel.setText("Key pressed: " + e.getKeyChar());
     }
     @Override
     public void keyTyped(KeyEvent e) {
-        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (e.getKeyChar()) {
-            case ' ':
-                
-                break;
-     
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            dialogScrollNum++;
         }
     }   
 
     public void getName(String name){
         userName=name; 
-        System.out.println(userName);
     }
     }
