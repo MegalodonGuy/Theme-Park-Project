@@ -15,7 +15,7 @@ public class LoseScreen {
         frame.setLayout(new FlowLayout());
         
 
-        loseLabel= new JLabel("You go home and try to forget about what just happend"); 
+        loseLabel= new JLabel("You go home and try to forget about what just happened"); 
         Dimension labelSize = loseLabel.getPreferredSize();
         loseLabel.setFont(new Font("Papyrus", Font.PLAIN, 45));
         loseLabel.setBounds(300, 100, labelSize.width, labelSize.height);

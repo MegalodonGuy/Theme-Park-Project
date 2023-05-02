@@ -180,7 +180,8 @@ public class TicketsPlease implements KeyListener{
     }
     private void accept (ActionEvent event){
         if (event.getSource()==acceptButton){
-            
+            GamePlay app = new GamePlay();
+            frame.setVisible(false);
         }
     }
 
