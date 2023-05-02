@@ -19,10 +19,13 @@ import java.awt.event.KeyListener;
 
 public class GamePlay implements KeyListener{
     private JFrame frame;
-    private String userName;
+    private String userName="";
     private Timer timer = new Timer(20, this::checkTime);
-    private JTextField nameField;
+    private JTextField inputField;
+    private JLabel dialogLabel;
+    private String currentDialog; 
     public GamePlay() {
+        timer.start(); 
         // Set up frame.
         frame = new JFrame("Tickets Please!");
         frame.setSize(1000, 700);
@@ -30,14 +33,32 @@ public class GamePlay implements KeyListener{
         frame.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.lightGray);
-       // frame.setResizable(false);
         // Set icon.
         ImageIcon icon = new ImageIcon("Tickets Please!/src/icon.png"); 
         frame.setIconImage(icon.getImage());
-        //Set up title label
 
+        //set up dialog text line
+        dialogLabel = new JLabel("Welcome to your first day ");
+        dialogLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        dialogLabel.setVerticalAlignment(SwingConstants.CENTER);
+        Dimension size = dialogLabel.getPreferredSize();
+        dialogLabel.setBounds(300, 100, size.width, size.height);
+        dialogLabel.setForeground(Color.black);
+        dialogLabel.setBackground(new Color(255,255,255));
+        dialogLabel.setOpaque(true);
+        dialogLabel.setBorder(BorderFactory.createEtchedBorder());
+        dialogLabel.setVisible(true);
+        //set up input text field
+        inputField = new JTextField("");
+        inputField.setPreferredSize(new Dimension(140,20));
+        inputField.setBounds(50, 50, 150, 0);
         
+        //add to frame
+        frame.add(inputField);
+        frame.add(dialogLabel);
         frame.getContentPane().setBackground(new Color(191,231,233));
+
+        layout.putConstraint(SpringLayout.WEST, dialogLabel,500,SpringLayout.WEST,inputField);
 
         // Display frame.
         frame.setVisible(true);
@@ -46,7 +67,7 @@ public class GamePlay implements KeyListener{
    
 
     private void checkTime(ActionEvent evt){
-
+        dialogLabel.setText(currentDialog);
     }
 
     public void keyPressed(KeyEvent e) {
@@ -67,4 +88,9 @@ public class GamePlay implements KeyListener{
      
         }
     }   
+
+    public void getName(String name){
+        userName=name; 
+        System.out.println(userName);
+    }
     }

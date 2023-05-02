@@ -181,6 +181,7 @@ public class TicketsPlease implements KeyListener{
     private void accept (ActionEvent event){
         if (event.getSource()==acceptButton){
             GamePlay app = new GamePlay();
+           app.getName(userName);
             frame.setVisible(false);
         }
     }
