@@ -8,10 +8,8 @@ import javax.swing.JWindow;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -176,7 +174,8 @@ public class TicketsPlease implements KeyListener{
 
     private void deny (ActionEvent event){
         if (event.getSource()==denyButton){
-
+            LoseScreen app = new LoseScreen();
+            frame.setVisible(false);
         }
     }
     private void accept (ActionEvent event){
