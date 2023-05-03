@@ -71,6 +71,10 @@ public class GamePlay implements KeyListener {
     private int secondCounter = 0;
     private int minuteCounter =0;
     private boolean timeStart = false;
+    private boolean rideBroken1 = false;
+    private boolean rideBroken2 = false;
+    private boolean rideBroken3 = false;
+    private boolean rideBroken4 = false;
 
     private String currentDialog;
     private int money = -2000000;
@@ -160,25 +164,25 @@ public class GamePlay implements KeyListener {
         gougeButton.setVisible(false);
 
         //set up repair button 1
-        repairButton1 = new JButton("Carousel");
+        repairButton1 = new JButton("Carousel ($10000)");
         repairButton1.addActionListener(this::repair1);
         repairButton1.setFocusable(false);
         repairButton1.setBackground(Color.green);
         repairButton1.setVisible(false);
         //set up repair button 2
-        repairButton2 = new JButton("Whirly Gig");
+        repairButton2 = new JButton("Whirly Gig ($12000)");
         repairButton2.addActionListener(this::repair2);
         repairButton2.setFocusable(false);
         repairButton2.setBackground(Color.green);
         repairButton2.setVisible(false);
         //set up repair button 3
-        repairButton3 = new JButton("Improper Dropper");
+        repairButton3 = new JButton("Improper Dropper ($15000)");
         repairButton3.addActionListener(this::repair3);
         repairButton3.setFocusable(false);
         repairButton3.setBackground(Color.green);
         repairButton3.setVisible(false);
         //set up repair button 4
-        repairButton4 = new JButton("Destined Death (the ride)");
+        repairButton4 = new JButton("Destined Death ($20000)");
         repairButton4.addActionListener(this::repair4);
         repairButton4.setFocusable(false);
         repairButton4.setBackground(Color.green);
@@ -245,7 +249,7 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.SOUTH, repairButton3, 50, SpringLayout.SOUTH, repairButton1);
         layout.putConstraint(SpringLayout.WEST, repairButton3, 0, SpringLayout.WEST, repairButton1);
         layout.putConstraint(SpringLayout.SOUTH, repairButton4, 50, SpringLayout.SOUTH, repairButton1);
-        layout.putConstraint(SpringLayout.WEST, repairButton4, 150, SpringLayout.WEST, repairButton1);
+        layout.putConstraint(SpringLayout.WEST, repairButton4, 200, SpringLayout.WEST, repairButton1);
         layout.putConstraint(SpringLayout.SOUTH, toggleTextArea, -100, SpringLayout.SOUTH, inputField);
         layout.putConstraint(SpringLayout.WEST, toggleTextArea, 450, SpringLayout.WEST, inputField);
 
@@ -260,15 +264,19 @@ public class GamePlay implements KeyListener {
             if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world
                     int randBreak = (int)(Math.random()*300);
                     if(randBreak==1){
+                        rideBroken1=true;
                         repairButton1.setBackground(Color.red);
                     }
                     else if (randBreak==2){
+                        rideBroken2=true;
                         repairButton2.setBackground(Color.red);
                     }
                     else if (randBreak==3){
+                        rideBroken3=true;
                         repairButton3.setBackground(Color.red);
                     }
                     else if (randBreak==4){
+                        rideBroken4=true;
                         repairButton4.setBackground(Color.red);
                     }
                 secondCounter++;
@@ -287,10 +295,10 @@ public class GamePlay implements KeyListener {
         gameTimer.setText("Time: " + minuteCounter+ "m:" +secondCounter + "s");    
         }
 
-        if (minuteCounter==1){
+        if (minuteCounter==10){
             LoseScreen app = new LoseScreen();
             frame.dispose();
-            timer.stop();
+            timer.stop(); // real important or the gui will keep being opened
         }
 
         moneyLabel.setText("Debt: "+money+" dollars");
@@ -422,16 +430,32 @@ public class GamePlay implements KeyListener {
     }
 
     private void repair1(ActionEvent e){
+        if (rideBroken1){
         repairButton1.setBackground(Color.green);
+        money-=10000;
+        rideBroken1=false;
+        }
     }
     private void repair2(ActionEvent e){
+        if (rideBroken2){
         repairButton2.setBackground(Color.green);
+        money-=12000;
+        rideBroken2=false;
+        }
     }
     private void repair3(ActionEvent e){
+        if (rideBroken3){
         repairButton3.setBackground(Color.green);
+        money-=15000;
+        rideBroken3=false;
+        }
     }
     private void repair4(ActionEvent e){
+        if (rideBroken4){
         repairButton4.setBackground(Color.green);
+        money-=20000;
+        rideBroken4=false;
+        }
     }
 
 
