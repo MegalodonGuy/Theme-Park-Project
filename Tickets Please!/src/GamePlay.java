@@ -19,14 +19,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GamePlay implements KeyListener{
+public class GamePlay implements KeyListener {
     private JFrame frame;
     private String userName;
     private Timer timer = new Timer(50, this::checkTime);
     private JTextArea inputField;
     private JLabel dialogLabel;
     private JLabel gameTimer;
-    private int dialogScrollNum=1; 
+    private JButton yesButton;
+    private JButton noButton;
+
+    private JButton repairButton1;
+    private JButton repairButton2;
+    private JButton repairButton3;
+    private JButton repairButton4;
+
+
+
+    private int dialogScrollNum = 1;
     private String dialog1;
     private String dialog2;
     private String dialog3;
@@ -50,41 +60,42 @@ public class GamePlay implements KeyListener{
     private String dialog21;
     private String dialog22;
     private String dialog23;
-  
 
-    private int tikCounter=0;
-    private int secondCounter=0;
+    private int tikCounter = 0;
+    private int secondCounter = 0;
+    private boolean timeStart = false;
 
-    private String currentDialog; 
+    private String currentDialog;
+    private int money = -2000000;
+
     public GamePlay(String name) {
-        //set up dialog
-        userName=name;
-        dialog1="Ona: Welcome to your first day "+userName+"! to get to the next dialog box press \"enter\".";
-        dialog2="Ona: Your job is to make sure the rides work, give good customer service and if you can, try to limit the causualties to three a day.";
-        dialog3=userName+": Three?";
-        dialog4="Ona: Ya we're trying to get that average down.";
-        dialog5=userName+": Huh, alright. Anyway what will my wage look like?";
-        dialog6="Ona: It's a competitave wage.";
-        dialog7=userName+": Competitave to what?";
-        dialog8="Ona: To your fellow employees.";
-        dialog9=userName+": I am the only employee.";
-        dialog10="Ona: Exactly. It's about time I come clean about something.";
-        dialog11=userName+": About what?";
-        dialog12="Ona: We are in severe debt.";
-        dialog13=userName+": Figured, how much?";
-        dialog14="Ona: 2 million dollars ... and 42 pending lawsuits. I got about 10 minutes to pay the debt.";
-        dialog15=userName+": How are you getting out of that?";
-        dialog16 ="Ona: By using you of course, you're going to have to cut some corners for me.";
-        dialog17=userName+": What corners?";
-        dialog18 ="Ona: Safty, ethics and the law. Do what you can to get as much money as possible.";
-        dialog19 ="Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and gouge.";
-        dialog20 ="Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
-        dialog21 ="Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
-        dialog22 ="Ona: Thats about it! Have fun I'll be hiding from the law!";
-        dialog23=userName+": good lord";
+        // set up dialog
+        userName = name;
+        dialog1 = "Ona: Welcome to your first day " + userName + "! to get to the next dialog box press \"enter\".";
+        dialog2 = "Ona: Your job is to make sure the rides work, give good customer service and if you can, try to limit the causualties to three a day.";
+        dialog3 = userName + ": Three?";
+        dialog4 = "Ona: Ya we're trying to get that average down.";
+        dialog5 = userName + ": Huh, alright. Anyway what will my wage look like?";
+        dialog6 = "Ona: It's a competitave wage.";
+        dialog7 = userName + ": Competitave to what?";
+        dialog8 = "Ona: To your fellow employees.";
+        dialog9 = userName + ": I am the only employee.";
+        dialog10 = "Ona: Exactly. It's about time I come clean about something.";
+        dialog11 = userName + ": Your business is in shambels, it's obvious.";
+        dialog12 = "Ona: Ya we're in severe debt.";
+        dialog13 = userName + ": Figured, how much?";
+        dialog14 = "Ona: 2 million dollars ... and 42 pending lawsuits. I got about 10 minutes to pay the debt.";
+        dialog15 = userName + ": How are you getting out of that?";
+        dialog16 = "Ona: By using you of course, you're going to have to cut some corners for me.";
+        dialog17 = userName + ": What corners?";
+        dialog18 = "Ona: Safty, ethics and the law. Do what you can to get as much money as possible.";
+        dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and gouge.";
+        dialog20 = "Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
+        dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
+        dialog22 = "Ona: Thats about it! Have fun I'll be hiding from the law!";
+        dialog23 = userName + ": I need to learn how to start saying no.";
 
-
-        timer.start(); 
+        timer.start();
         // Set up frame.
         frame = new JFrame("Tickets Please!");
         frame.setSize(1000, 700);
@@ -93,149 +104,255 @@ public class GamePlay implements KeyListener{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.lightGray);
         // Set icon.
-        ImageIcon icon = new ImageIcon("Tickets Please!/src/icon.png"); 
+        ImageIcon icon = new ImageIcon("Tickets Please!/src/icon.png");
         frame.setIconImage(icon.getImage());
 
-        //set up dialog text line
+        // set up dialog text line
         dialogLabel = new JLabel("");
         dialogLabel.setHorizontalAlignment(SwingConstants.CENTER);
         dialogLabel.setVerticalAlignment(SwingConstants.CENTER);
         Dimension size = dialogLabel.getPreferredSize();
         dialogLabel.setBounds(300, 100, size.width, size.height);
         dialogLabel.setForeground(Color.black);
-        dialogLabel.setBackground(new Color(255,255,255));
+        dialogLabel.setBackground(new Color(255, 255, 255));
         dialogLabel.setOpaque(true);
         dialogLabel.setBorder(BorderFactory.createEtchedBorder());
         dialogLabel.setVisible(true);
 
-        //set up game timer
+        //set up "yes" button
+        yesButton = new JButton("Accept");
+        yesButton.addActionListener(this::acceptOffer);
+        yesButton.setFocusable(false);
+        yesButton.setContentAreaFilled(false);
+        yesButton.setVisible(false);
+
+        //set up "no" button
+        noButton = new JButton("Deny");
+        noButton.addActionListener(this::denyOffer);
+        noButton.setFocusable(false);
+        noButton.setContentAreaFilled(false);
+        noButton.setVisible(false);
+
+        //set up repair button 1
+        repairButton1 = new JButton("Carousel");
+        repairButton1.addActionListener(this::repair1);
+        repairButton1.setFocusable(false);
+        repairButton1.setBackground(Color.green);
+        repairButton1.setVisible(false);
+        //set up repair button 2
+        repairButton2 = new JButton("Whirly Gig");
+        repairButton2.addActionListener(this::repair2);
+        repairButton2.setFocusable(false);
+        repairButton2.setBackground(Color.green);
+        repairButton2.setVisible(false);
+        //set up repair button 3
+        repairButton3 = new JButton("Improper Dropper");
+        repairButton3.addActionListener(this::repair3);
+        repairButton3.setFocusable(false);
+        repairButton3.setBackground(Color.green);
+        repairButton3.setVisible(false);
+        //set up repair button 4
+        repairButton4 = new JButton("Destined Death (the ride)");
+        repairButton4.addActionListener(this::repair4);
+        repairButton4.setFocusable(false);
+        repairButton4.setBackground(Color.green);
+        repairButton4.setVisible(false);
+
+
+        // set up game timer
         gameTimer = new JLabel("");
         gameTimer.setHorizontalAlignment(SwingConstants.CENTER);
         gameTimer.setVerticalAlignment(SwingConstants.CENTER);
         Dimension timerSize = dialogLabel.getPreferredSize();
         gameTimer.setBounds(300, 100, timerSize.width, timerSize.height);
         gameTimer.setForeground(Color.black);
-        gameTimer.setBackground(new Color(255,255,255));
+        gameTimer.setBackground(new Color(255, 255, 255));
         gameTimer.setOpaque(true);
         gameTimer.setBorder(BorderFactory.createEtchedBorder());
-        gameTimer.setVisible(true);
-        //set up input text area
+        gameTimer.setVisible(false);
+        // set up input text area
         inputField = new JTextArea("");
-        inputField.setPreferredSize(new Dimension(440,200));
+        inputField.setPreferredSize(new Dimension(440, 200));
         inputField.setBounds(50, 50, 150, 0);
-        
-        //add to frame
+        inputField.setVisible(false);
+        // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
         frame.add(dialogLabel);
-        frame.getContentPane().setBackground(new Color(191,231,233));
+        frame.add(yesButton);
+        frame.add(noButton);
+        frame.add(repairButton1);
+        frame.add(repairButton2);
+        frame.add(repairButton3);
+        frame.add(repairButton4);
+        frame.getContentPane().setBackground(new Color(191, 231, 233));
         frame.addKeyListener(this);
 
-        //GUI Layout
-        layout.putConstraint(SpringLayout.WEST, dialogLabel,50,SpringLayout.WEST,gameTimer);
-        layout.putConstraint(SpringLayout.WEST, inputField,300,SpringLayout.WEST,gameTimer);
-        layout.putConstraint(SpringLayout.SOUTH, inputField,300,SpringLayout.SOUTH,gameTimer);
-        layout.putConstraint(SpringLayout.SOUTH, dialogLabel,50,SpringLayout.SOUTH,gameTimer);
+        // GUI Layout
+        layout.putConstraint(SpringLayout.WEST, dialogLabel, 50, SpringLayout.WEST, gameTimer);
+        layout.putConstraint(SpringLayout.WEST, inputField, 400, SpringLayout.WEST, gameTimer);
+        layout.putConstraint(SpringLayout.SOUTH, inputField, 300, SpringLayout.SOUTH, gameTimer);
+        layout.putConstraint(SpringLayout.SOUTH, dialogLabel, 50, SpringLayout.SOUTH, gameTimer);
+        layout.putConstraint(SpringLayout.SOUTH, yesButton, 50, SpringLayout.SOUTH, inputField);
+        layout.putConstraint(SpringLayout.WEST, yesButton, 0, SpringLayout.WEST, inputField);
+        layout.putConstraint(SpringLayout.WEST, noButton, 100, SpringLayout.WEST, yesButton);
+        layout.putConstraint(SpringLayout.SOUTH, noButton, 0, SpringLayout.SOUTH, yesButton);
+        layout.putConstraint(SpringLayout.SOUTH, repairButton1, 150, SpringLayout.SOUTH, gameTimer);
+        layout.putConstraint(SpringLayout.WEST, repairButton1, 10, SpringLayout.WEST, gameTimer);
+        layout.putConstraint(SpringLayout.SOUTH, repairButton2, 0, SpringLayout.SOUTH, repairButton1);
+        layout.putConstraint(SpringLayout.WEST, repairButton2, 150, SpringLayout.WEST, repairButton1);
+        layout.putConstraint(SpringLayout.SOUTH, repairButton3, 50, SpringLayout.SOUTH, repairButton1);
+        layout.putConstraint(SpringLayout.WEST, repairButton3, 0, SpringLayout.WEST, repairButton1);
+        layout.putConstraint(SpringLayout.SOUTH, repairButton4, 50, SpringLayout.SOUTH, repairButton1);
+        layout.putConstraint(SpringLayout.WEST, repairButton4, 150, SpringLayout.WEST, repairButton1);
+        
+
         // Display frame.
         frame.setVisible(true);
     }
 
-   
+    private void checkTime(ActionEvent evt) {
 
-    private void checkTime(ActionEvent evt){
+
         frame.setFocusable(true);
         frame.requestFocus();
-        tikCounter++;
-        if (tikCounter%16==0){ // account for lag :\, should be 20 in a perfect world
-            secondCounter++;
+
+        if (timeStart) {
+            tikCounter++;
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world
+                    int randBreak = (int)(Math.random()*300);
+                    if(randBreak==1){
+                        repairButton1.setBackground(Color.red);
+                    }
+                    else if (randBreak==2){
+                        repairButton2.setBackground(Color.red);
+                    }
+                    else if (randBreak==3){
+                        repairButton3.setBackground(Color.red);
+                    }
+                    else if (randBreak==4){
+                        repairButton4.setBackground(Color.red);
+                    }
+                secondCounter++;
+            }
         }
         dialogLabel.setText(currentDialog);
-        gameTimer.setText("Time: "+ secondCounter+ "s");
-        switch (dialogScrollNum){
+        gameTimer.setText("Time: " + secondCounter + "s");
+        switch (dialogScrollNum) {
             case 1:
-            currentDialog= dialog1;
-            break;
+                currentDialog = dialog1;
+                break;
             case 2:
-            currentDialog=dialog2;
-            break;
+                currentDialog = dialog2;
+                break;
             case 3:
-            currentDialog=dialog3;
-            break;
+                currentDialog = dialog3;
+                break;
             case 4:
-            currentDialog=dialog4;
-            break;
+                currentDialog = dialog4;
+                break;
             case 5:
-            currentDialog=dialog5;
-            break;
+                currentDialog = dialog5;
+                break;
             case 6:
-            currentDialog=dialog6;
-            break;
+                currentDialog = dialog6;
+                break;
             case 7:
-            currentDialog=dialog7;
-            break;
+                currentDialog = dialog7;
+                break;
             case 8:
-            currentDialog=dialog8;
-            break;
+                currentDialog = dialog8;
+                break;
             case 9:
-            currentDialog=dialog9;
-            break;
+                currentDialog = dialog9;
+                break;
             case 10:
-            currentDialog=dialog10;
-            break;
+                currentDialog = dialog10;
+                break;
             case 11:
-            currentDialog=dialog11;
-            break;
+                currentDialog = dialog11;
+                break;
             case 12:
-            currentDialog=dialog12;
-            break;
+                currentDialog = dialog12;
+                break;
             case 13:
-            currentDialog=dialog13;
-            break;
+                currentDialog = dialog13;
+                break;
             case 14:
-            currentDialog=dialog14;
-            break;
+                currentDialog = dialog14;
+                break;
             case 15:
-            currentDialog=dialog15;
-            break;
+                currentDialog = dialog15;
+                break;
             case 16:
-            currentDialog=dialog16;
-            break;
+                currentDialog = dialog16;
+                break;
             case 17:
-            currentDialog=dialog17;
-            break;
+                currentDialog = dialog17;
+                break;
             case 18:
-            currentDialog=dialog18;
-            break;
+                currentDialog = dialog18;
+                break;
             case 19:
-            currentDialog=dialog19;
-            break;
+                currentDialog = dialog19;
+                break;
             case 20:
-            currentDialog=dialog20;
-            break;
+                currentDialog = dialog20;
+                inputField.setVisible(true);
+                yesButton.setVisible(true);
+                noButton.setVisible(true);
+                break;
             case 21:
-            currentDialog=dialog21;
-            break;
+                currentDialog = dialog21;
+                repairButton1.setVisible(true);
+                repairButton2.setVisible(true);
+                repairButton3.setVisible(true);
+                repairButton4.setVisible(true);
+                break;
             case 22:
-            currentDialog=dialog22;
-            break;
+                currentDialog = dialog22;
+                break;
             case 23:
-            currentDialog=dialog23;
-            break;
+                currentDialog = dialog23;
+                timeStart=true;
+                gameTimer.setVisible(true);
+                break;
         }
     }
 
     public void keyPressed(KeyEvent e) {
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyChar()==KeyEvent.VK_ENTER){
+        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
             dialogScrollNum++;
         }
-    }   
-
-    
     }
+
+    private void acceptOffer(ActionEvent e){
+
+    }
+
+    private void denyOffer(ActionEvent e){
+
+    }
+
+    private void repair1(ActionEvent e){
+        repairButton1.setBackground(Color.green);
+    }
+    private void repair2(ActionEvent e){
+        repairButton2.setBackground(Color.green);
+    }
+    private void repair3(ActionEvent e){
+        repairButton3.setBackground(Color.green);
+    }
+    private void repair4(ActionEvent e){
+        repairButton4.setBackground(Color.green);
+    }
+
+}
