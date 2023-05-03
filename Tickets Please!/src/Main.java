@@ -3,6 +3,8 @@ public class Main {
         // Create the app object.
         TicketsPlease app = new TicketsPlease();
         //get info from files
-        Customers.setNames();
+        Customer.setFirstNames();
+        Customer customer = new Customer();
+        System.out.println(customer.customerInfo()); 
     }
 }
