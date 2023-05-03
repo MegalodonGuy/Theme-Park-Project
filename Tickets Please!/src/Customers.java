@@ -1,5 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Customers {
-    private static String[] firstNames = {};
+    private static String[] firstNames = new String[18239];
     private String firstName;
     private String lastName;
     private int IDnum;
@@ -28,5 +33,20 @@ public class Customers {
     }
     public int getAge() {
         return this.age;
+    }
+
+    public static void setNames(){
+        try (Scanner keyboard = new Scanner(new File("Tickets Please!/src/FirstNames.txt"))) {
+            
+            for (int i=0; i<firstNames.length;i++ ){
+                firstNames[i] = keyboard.nextLine();
+            }
+            System.out.println(Arrays.toString(firstNames));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        
     }
 }

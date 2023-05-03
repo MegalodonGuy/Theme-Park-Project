@@ -255,6 +255,8 @@ public class GamePlay implements KeyListener {
 
         // Display frame.
         frame.setVisible(true);
+
+        //
     }
 
     private void checkTime(ActionEvent evt) {
