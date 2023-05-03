@@ -69,6 +69,7 @@ public class GamePlay implements KeyListener {
     private boolean areaToggled=true; 
     private int tikCounter = 0;
     private int secondCounter = 0;
+    private int minuteCounter =0;
     private boolean timeStart = false;
 
     private String currentDialog;
@@ -98,7 +99,7 @@ public class GamePlay implements KeyListener {
         dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and gouge.";
         dialog20 = "Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
-        dialog22 = "Ona: Also use the toggle terminal to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
+        dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
         dialog23 = userName + ": I need to learn how to start saying no.";
 
         timer.start();
@@ -272,9 +273,26 @@ public class GamePlay implements KeyListener {
                     }
                 secondCounter++;
             }
+            if (secondCounter>=60){
+                secondCounter-=60; 
+                minuteCounter++;
+            }
         }
         dialogLabel.setText(currentDialog);
+
+        if (minuteCounter<1){
         gameTimer.setText("Time: " + secondCounter + "s");
+        }
+        else{
+        gameTimer.setText("Time: " + minuteCounter+ "m:" +secondCounter + "s");    
+        }
+
+        if (minuteCounter==1){
+            LoseScreen app = new LoseScreen();
+            frame.dispose();
+            timer.stop();
+        }
+
         moneyLabel.setText("Debt: "+money+" dollars");
         switch (dialogScrollNum) {
             case 1:
