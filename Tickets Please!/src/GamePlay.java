@@ -26,6 +26,7 @@ public class GamePlay implements KeyListener {
     private JTextArea inputField;
     private JLabel dialogLabel;
     private JLabel gameTimer;
+    private JLabel moneyLabel;
 
     private JButton toggleTextArea;
 
@@ -124,6 +125,18 @@ public class GamePlay implements KeyListener {
         dialogLabel.setBorder(BorderFactory.createEtchedBorder());
         dialogLabel.setVisible(true);
 
+
+        //set up money label
+        moneyLabel = new JLabel("");
+        moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        moneyLabel.setVerticalAlignment(SwingConstants.CENTER);
+        moneyLabel.setVisible(false);
+        Dimension moneyLabelSize = moneyLabel.getPreferredSize();
+        moneyLabel.setBounds(300, 100, moneyLabelSize.width, moneyLabelSize.height);
+        moneyLabel.setForeground(Color.black);
+        moneyLabel.setBackground(new Color(255, 255, 255));
+        moneyLabel.setOpaque(true);
+        moneyLabel.setBorder(BorderFactory.createEtchedBorder());
         //set up "yes" button
         yesButton = new JButton("Accept");
         yesButton.addActionListener(this::acceptOffer);
@@ -175,7 +188,7 @@ public class GamePlay implements KeyListener {
         gameTimer = new JLabel("");
         gameTimer.setHorizontalAlignment(SwingConstants.CENTER);
         gameTimer.setVerticalAlignment(SwingConstants.CENTER);
-        Dimension timerSize = dialogLabel.getPreferredSize();
+        Dimension timerSize = gameTimer.getPreferredSize();
         gameTimer.setBounds(300, 100, timerSize.width, timerSize.height);
         gameTimer.setForeground(Color.black);
         gameTimer.setBackground(new Color(255, 255, 255));
@@ -208,10 +221,12 @@ public class GamePlay implements KeyListener {
         frame.add(repairButton3);
         frame.add(repairButton4);
         frame.add(toggleTextArea);
+        frame.add(moneyLabel);
         frame.getContentPane().setBackground(new Color(191, 231, 233));
         frame.addKeyListener(this);
 
         // GUI Layout
+        layout.putConstraint(SpringLayout.WEST, moneyLabel, 800, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.WEST, dialogLabel, 50, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.WEST, inputField, 400, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, inputField, 300, SpringLayout.SOUTH, gameTimer);
@@ -260,6 +275,7 @@ public class GamePlay implements KeyListener {
         }
         dialogLabel.setText(currentDialog);
         gameTimer.setText("Time: " + secondCounter + "s");
+        moneyLabel.setText("Debt: "+money+" dollars");
         switch (dialogScrollNum) {
             case 1:
                 currentDialog = dialog1;
@@ -302,6 +318,7 @@ public class GamePlay implements KeyListener {
                 break;
             case 14:
                 currentDialog = dialog14;
+                moneyLabel.setVisible(true);
                 break;
             case 15:
                 currentDialog = dialog15;
