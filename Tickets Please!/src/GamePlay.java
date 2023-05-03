@@ -27,6 +27,8 @@ public class GamePlay implements KeyListener {
     private JLabel dialogLabel;
     private JLabel gameTimer;
 
+    private JButton toggleTextArea;
+
     private JButton yesButton;
     private JButton noButton;
     private JButton gougeButton;
@@ -63,6 +65,7 @@ public class GamePlay implements KeyListener {
     private String dialog22;
     private String dialog23;
 
+    private boolean areaToggled=true; 
     private int tikCounter = 0;
     private int secondCounter = 0;
     private boolean timeStart = false;
@@ -94,7 +97,7 @@ public class GamePlay implements KeyListener {
         dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and gouge.";
         dialog20 = "Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
-        dialog22 = "Ona: Thats about it! Have fun I'll be hiding from the law!";
+        dialog22 = "Ona: Also use the toggle terminal to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
         dialog23 = userName + ": I need to learn how to start saying no.";
 
         timer.start();
@@ -184,6 +187,15 @@ public class GamePlay implements KeyListener {
         inputField.setPreferredSize(new Dimension(440, 200));
         inputField.setBounds(50, 50, 150, 0);
         inputField.setVisible(false);
+        inputField.setBackground(Color.black);
+        inputField.setFocusable(false);
+        //set up a button that toggles the text area on and off
+        toggleTextArea = new JButton("Toggle terminal");
+        toggleTextArea.addActionListener(this::toggleTyping);
+        toggleTextArea.setFocusable(false);
+        toggleTextArea.setBackground(Color.blue);
+        toggleTextArea.setForeground(Color.white);
+        toggleTextArea.setVisible(false);
         // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
@@ -195,6 +207,7 @@ public class GamePlay implements KeyListener {
         frame.add(repairButton2);
         frame.add(repairButton3);
         frame.add(repairButton4);
+        frame.add(toggleTextArea);
         frame.getContentPane().setBackground(new Color(191, 231, 233));
         frame.addKeyListener(this);
 
@@ -217,18 +230,15 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.WEST, repairButton3, 0, SpringLayout.WEST, repairButton1);
         layout.putConstraint(SpringLayout.SOUTH, repairButton4, 50, SpringLayout.SOUTH, repairButton1);
         layout.putConstraint(SpringLayout.WEST, repairButton4, 150, SpringLayout.WEST, repairButton1);
-        
+        layout.putConstraint(SpringLayout.SOUTH, toggleTextArea, -100, SpringLayout.SOUTH, inputField);
+        layout.putConstraint(SpringLayout.WEST, toggleTextArea, 450, SpringLayout.WEST, inputField);
 
         // Display frame.
         frame.setVisible(true);
     }
 
     private void checkTime(ActionEvent evt) {
-
-
-        frame.setFocusable(true);
-        frame.requestFocus();
-
+         
         if (timeStart) {
             tikCounter++;
             if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world
@@ -314,6 +324,7 @@ public class GamePlay implements KeyListener {
                 inputField.setVisible(true);
                 yesButton.setVisible(true);
                 noButton.setVisible(true);
+                toggleTextArea.setVisible(true);
                 break;
             case 21:
                 currentDialog = dialog21;
@@ -351,6 +362,22 @@ public class GamePlay implements KeyListener {
 
     }
 
+    private void toggleTyping (ActionEvent e){
+        if (areaToggled){
+            inputField.setBackground(Color.white);
+            inputField.setFocusable(true);
+            frame.setFocusable(false);
+            inputField.requestFocus();
+            areaToggled=false;
+        } else{
+            inputField.setBackground(Color.black);
+            frame.setFocusable(true);
+            inputField.setFocusable(false);
+            frame.requestFocus();
+            areaToggled=true;
+        }
+    }
+
     private void denyOffer(ActionEvent e){
 
     }
@@ -371,5 +398,6 @@ public class GamePlay implements KeyListener {
     private void repair4(ActionEvent e){
         repairButton4.setBackground(Color.green);
     }
+
 
 }
