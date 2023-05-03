@@ -26,8 +26,10 @@ public class GamePlay implements KeyListener {
     private JTextArea inputField;
     private JLabel dialogLabel;
     private JLabel gameTimer;
+
     private JButton yesButton;
     private JButton noButton;
+    private JButton gougeButton;
 
     private JButton repairButton1;
     private JButton repairButton2;
@@ -133,6 +135,13 @@ public class GamePlay implements KeyListener {
         noButton.setContentAreaFilled(false);
         noButton.setVisible(false);
 
+        //set up "gouge" button
+        gougeButton = new JButton("Gouge em!");
+        gougeButton.addActionListener(this::gouge);
+        gougeButton.setFocusable(false);
+        gougeButton.setContentAreaFilled(false);
+        gougeButton.setVisible(false);
+
         //set up repair button 1
         repairButton1 = new JButton("Carousel");
         repairButton1.addActionListener(this::repair1);
@@ -181,6 +190,7 @@ public class GamePlay implements KeyListener {
         frame.add(dialogLabel);
         frame.add(yesButton);
         frame.add(noButton);
+        frame.add(gougeButton);
         frame.add(repairButton1);
         frame.add(repairButton2);
         frame.add(repairButton3);
@@ -197,6 +207,8 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.WEST, yesButton, 0, SpringLayout.WEST, inputField);
         layout.putConstraint(SpringLayout.WEST, noButton, 100, SpringLayout.WEST, yesButton);
         layout.putConstraint(SpringLayout.SOUTH, noButton, 0, SpringLayout.SOUTH, yesButton);
+        layout.putConstraint(SpringLayout.WEST, gougeButton, 100, SpringLayout.WEST, noButton);
+        layout.putConstraint(SpringLayout.SOUTH, gougeButton, 0, SpringLayout.SOUTH, yesButton);
         layout.putConstraint(SpringLayout.SOUTH, repairButton1, 150, SpringLayout.SOUTH, gameTimer);
         layout.putConstraint(SpringLayout.WEST, repairButton1, 10, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, repairButton2, 0, SpringLayout.SOUTH, repairButton1);
@@ -295,6 +307,7 @@ public class GamePlay implements KeyListener {
                 break;
             case 19:
                 currentDialog = dialog19;
+                gougeButton.setVisible(true);
                 break;
             case 20:
                 currentDialog = dialog20;
@@ -339,6 +352,10 @@ public class GamePlay implements KeyListener {
     }
 
     private void denyOffer(ActionEvent e){
+
+    }
+
+    private void gouge(ActionEvent e){
 
     }
 
