@@ -87,6 +87,7 @@ public class GamePlay implements KeyListener {
     private String currentIDNum;
     private int currentAge;
     private int currentMoneyCharged; 
+    private String currentLie; 
 
     public GamePlay(String name) {
         // set up dialog
@@ -438,11 +439,28 @@ public class GamePlay implements KeyListener {
                 if (createNewCustomer){
                     Customer customer = new Customer(); 
                     currentDialog = customer.customerInfo();
+                    currentLie=customer.getLie(); 
                     currentAge= customer.getAge();
                     currentFirstName = customer.getFirstName();
                     currentLastName = customer.getLastName();
                     currentIDNum = customer.getIDNum();
                     currentMoneyCharged = customer.getMoneyCharged();
+
+                    if (currentLie.equals("First Name")){
+                        currentFirstName=customer.getFakeFirstName();
+                    }
+                    else if(currentLie.equals("Last Name")){
+                        currentLastName =customer.getFakeLastName();
+                    }
+                    else if(currentLie.equals("Age")){
+                        currentAge=customer.getFakeAge();
+                    }
+                    else if(currentLie.equals("ID")){
+                        currentIDNum=customer.getFakeIDNum();
+                    }
+                    else if(currentLie.equals("Money")){
+                        currentMoneyCharged=customer.getFakeMoneyCharged();
+                    }
                     createNewCustomer=false;
                 }
                 break;
