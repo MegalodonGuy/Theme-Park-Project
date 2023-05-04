@@ -304,11 +304,17 @@ public class GamePlay implements KeyListener {
                     safteyFactor*=0.3;
                     repairButton4.setBackground(Color.red);
                 }
-
+                if (customersInPark>30){
+                safteyFactor*=1.001;  //simulates reduced risk of peiple leaving the park
+                }
 
                 int randDeath = (int)(Math.random() * safteyFactor);
 
+                if (randDeath==0){
+                    deaths++;
+                }
                 secondCounter++;
+                System.out.println(safteyFactor);
             }
             if (secondCounter >= 60) {
                 secondCounter -= 60;
@@ -323,7 +329,7 @@ public class GamePlay implements KeyListener {
             gameTimer.setText("Time: " + minuteCounter + "m:" + secondCounter + "s");
         }
 
-        if (minuteCounter == 10) {
+        if (minuteCounter == 10 || deaths==3) {
             LoseScreen app = new LoseScreen();
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened
@@ -464,7 +470,7 @@ public class GamePlay implements KeyListener {
         dialogScrollNum=1;
         money+=currentMoneyCharged;
         customersInPark++;
-        safteyFactor*=0.95;
+        safteyFactor*=0.99;
         }
     }
 
