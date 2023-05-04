@@ -8,7 +8,7 @@ public class Customer {
     private static String[] lastNames;
     private String firstName;
     private String lastName;
-    private String IDnum;
+    private String idNum;
     private int age;
     private int moneyCharged;
     public Customer(){
@@ -16,7 +16,7 @@ public class Customer {
         this.firstName = firstNames[ranFirstName];
         int ranLastName = (int)(Math.random()*lastNames.length); 
         this.lastName = lastNames[ranLastName];
-        this.IDnum=(""+((int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10))); // gets random digit in thousands, hundreds, tens and ones
+        this.idNum=(""+((int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10))); // gets random digit in thousands, hundreds, tens and ones
         int ranCharge = (int)(Math.random()*3);
         switch (ranCharge) {
             case 0:
@@ -34,7 +34,23 @@ public class Customer {
     }
 
     public String customerInfo(){
-        return ("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.IDnum + " Initial Charge: " + this.moneyCharged);
+        return ("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged);
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+    public int getAge() {
+        return this.age;
+    }
+    public String getLastName() {
+        return this.lastName;
+    }
+    public String getIDNum() {
+        return this.idNum;
+    }
+    public int getMoneyCharged() {
+        return this.moneyCharged;
     }
 
     public static void setFirstNames(){

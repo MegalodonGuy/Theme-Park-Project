@@ -27,7 +27,7 @@ public class GamePlay implements KeyListener {
     private JLabel dialogLabel;
     private JLabel gameTimer;
     private JLabel moneyLabel;
-
+    private JLabel deathLabel; 
     private JButton toggleTextArea;
 
     private JButton yesButton;
@@ -77,7 +77,16 @@ public class GamePlay implements KeyListener {
     private boolean createNewCustomer = false;
     private String currentDialog;
     private int money = -2000000;
-    private boolean currentOfferChose=false;;
+    private int deaths =0; 
+    private boolean currentOfferChose=false;
+
+    //current customer info
+    private String currentFirstName; 
+    private String currentLastName;
+    private String currentIDNum;
+    private int currentAge;
+    private int currentMoneyCharged; 
+
     public GamePlay(String name) {
         // set up dialog
         userName = name;
@@ -99,7 +108,7 @@ public class GamePlay implements KeyListener {
         dialog16 = "Ona: By using you of course, you're going to have to cut some corners for me.";
         dialog17 = userName + ": What corners?";
         dialog18 = "Ona: Safty, ethics and the law. Do what you can to get as much money as possible.";
-        dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and gouge.";
+        dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and price gouge.";
         dialog20 = "Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
         dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
@@ -142,6 +151,18 @@ public class GamePlay implements KeyListener {
         moneyLabel.setBackground(new Color(255, 255, 255));
         moneyLabel.setOpaque(true);
         moneyLabel.setBorder(BorderFactory.createEtchedBorder());
+        // set up money label
+        deathLabel = new JLabel("");
+        deathLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        deathLabel.setVerticalAlignment(SwingConstants.CENTER);
+        deathLabel.setVisible(false);
+        Dimension deathLabelSize = deathLabel.getPreferredSize();
+        deathLabel.setBounds(300, 100, deathLabelSize.width, deathLabelSize.height);
+        deathLabel.setForeground(Color.black);
+        deathLabel.setBackground(new Color(255, 255, 255));
+        deathLabel.setOpaque(true);
+        deathLabel.setBorder(BorderFactory.createEtchedBorder());
+
         // set up "yes" button
         yesButton = new JButton("Accept");
         yesButton.addActionListener(this::acceptOffer);
@@ -157,7 +178,7 @@ public class GamePlay implements KeyListener {
         noButton.setVisible(false);
 
         // set up "gouge" button
-        gougeButton = new JButton("Gouge em!");
+        gougeButton = new JButton("Rip em off!");
         gougeButton.addActionListener(this::gouge);
         gougeButton.setFocusable(false);
         gougeButton.setContentAreaFilled(false);
@@ -226,6 +247,7 @@ public class GamePlay implements KeyListener {
         frame.add(repairButton4);
         frame.add(toggleTextArea);
         frame.add(moneyLabel);
+        frame.add(deathLabel);
         frame.getContentPane().setBackground(new Color(191, 231, 233));
         frame.addKeyListener(this);
 
@@ -251,11 +273,11 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.WEST, repairButton4, 200, SpringLayout.WEST, repairButton1);
         layout.putConstraint(SpringLayout.SOUTH, toggleTextArea, -100, SpringLayout.SOUTH, inputField);
         layout.putConstraint(SpringLayout.WEST, toggleTextArea, 450, SpringLayout.WEST, inputField);
+        layout.putConstraint(SpringLayout.SOUTH, deathLabel, 20, SpringLayout.SOUTH, moneyLabel);
+        layout.putConstraint(SpringLayout.WEST, deathLabel, 0, SpringLayout.WEST, moneyLabel);
 
         // Display frame.
         frame.setVisible(true);
-
-        //
     }
 
     private void checkTime(ActionEvent evt) {
@@ -299,6 +321,8 @@ public class GamePlay implements KeyListener {
         }
 
         moneyLabel.setText("Debt: " + money + " dollars");
+        deathLabel.setText("Deaths: " + deaths);
+
         if (!startDialogOver) { // starting dialog
             switch (dialogScrollNum) {
                 case 1:
@@ -312,6 +336,7 @@ public class GamePlay implements KeyListener {
                     break;
                 case 4:
                     currentDialog = dialog4;
+                    deathLabel.setVisible(true);
                     break;
                 case 5:
                     currentDialog = dialog5;
@@ -398,16 +423,12 @@ public class GamePlay implements KeyListener {
                 if (createNewCustomer){
                     Customer customer = new Customer(); 
                     currentDialog = customer.customerInfo();
+                    currentAge= customer.getAge();
+                    currentFirstName = customer.getFirstName();
+                    currentLastName = customer.getLastName();
+                    currentIDNum = customer.getIDNum();
+                    currentMoneyCharged = customer.getMoneyCharged();
                     createNewCustomer=false;
-                }
-                break;
-                case 3:
-                if (currentOfferChose){
-                    dialogScrollNum=0;
-                    currentOfferChose=false;
-                }
-                else {
-                    dialogScrollNum=2;
                 }
                 break;
             }
@@ -430,8 +451,10 @@ public class GamePlay implements KeyListener {
     }
 
     private void acceptOffer(ActionEvent e) {
-        dialogScrollNum++;
-        currentOfferChose=true;
+        if (startDialogOver && dialogScrollNum>=2){
+        dialogScrollNum=1;
+        money+=currentMoneyCharged;
+        }
     }
 
     private void toggleTyping(ActionEvent e) {
@@ -451,8 +474,9 @@ public class GamePlay implements KeyListener {
     }
 
     private void denyOffer(ActionEvent e) {
-        dialogScrollNum++;
-        currentOfferChose=true;
+        if (startDialogOver && dialogScrollNum>=2){
+            dialogScrollNum=1;
+            }
     }
 
     private void gouge(ActionEvent e) {
