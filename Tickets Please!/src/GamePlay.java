@@ -39,8 +39,6 @@ public class GamePlay implements KeyListener {
     private JButton repairButton3;
     private JButton repairButton4;
 
-
-
     private int dialogScrollNum = 1;
     private String dialog1;
     private String dialog2;
@@ -66,19 +64,20 @@ public class GamePlay implements KeyListener {
     private String dialog22;
     private String dialog23;
 
-    private boolean areaToggled=true; 
+    private boolean areaToggled = true;
     private int tikCounter = 0;
     private int secondCounter = 0;
-    private int minuteCounter =0;
+    private int minuteCounter = 0;
     private boolean timeStart = false;
     private boolean rideBroken1 = false;
     private boolean rideBroken2 = false;
     private boolean rideBroken3 = false;
     private boolean rideBroken4 = false;
-
+    private boolean startDialogOver = false;
+    private boolean createNewCustomer = false;
     private String currentDialog;
     private int money = -2000000;
-
+    private boolean currentOfferChose=false;;
     public GamePlay(String name) {
         // set up dialog
         userName = name;
@@ -105,6 +104,8 @@ public class GamePlay implements KeyListener {
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
         dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
         dialog23 = userName + ": I need to learn how to start saying no.";
+        //initiate customer
+        Customer customer = new Customer(); 
 
         timer.start();
         // Set up frame.
@@ -130,8 +131,7 @@ public class GamePlay implements KeyListener {
         dialogLabel.setBorder(BorderFactory.createEtchedBorder());
         dialogLabel.setVisible(true);
 
-
-        //set up money label
+        // set up money label
         moneyLabel = new JLabel("");
         moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
         moneyLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -142,52 +142,51 @@ public class GamePlay implements KeyListener {
         moneyLabel.setBackground(new Color(255, 255, 255));
         moneyLabel.setOpaque(true);
         moneyLabel.setBorder(BorderFactory.createEtchedBorder());
-        //set up "yes" button
+        // set up "yes" button
         yesButton = new JButton("Accept");
         yesButton.addActionListener(this::acceptOffer);
         yesButton.setFocusable(false);
         yesButton.setContentAreaFilled(false);
         yesButton.setVisible(false);
 
-        //set up "no" button
+        // set up "no" button
         noButton = new JButton("Deny");
         noButton.addActionListener(this::denyOffer);
         noButton.setFocusable(false);
         noButton.setContentAreaFilled(false);
         noButton.setVisible(false);
 
-        //set up "gouge" button
+        // set up "gouge" button
         gougeButton = new JButton("Gouge em!");
         gougeButton.addActionListener(this::gouge);
         gougeButton.setFocusable(false);
         gougeButton.setContentAreaFilled(false);
         gougeButton.setVisible(false);
 
-        //set up repair button 1
+        // set up repair button 1
         repairButton1 = new JButton("Carousel ($10000)");
         repairButton1.addActionListener(this::repair1);
         repairButton1.setFocusable(false);
         repairButton1.setBackground(Color.green);
         repairButton1.setVisible(false);
-        //set up repair button 2
+        // set up repair button 2
         repairButton2 = new JButton("Whirly Gig ($12000)");
         repairButton2.addActionListener(this::repair2);
         repairButton2.setFocusable(false);
         repairButton2.setBackground(Color.green);
         repairButton2.setVisible(false);
-        //set up repair button 3
+        // set up repair button 3
         repairButton3 = new JButton("Improper Dropper ($15000)");
         repairButton3.addActionListener(this::repair3);
         repairButton3.setFocusable(false);
         repairButton3.setBackground(Color.green);
         repairButton3.setVisible(false);
-        //set up repair button 4
+        // set up repair button 4
         repairButton4 = new JButton("Destined Death ($20000)");
         repairButton4.addActionListener(this::repair4);
         repairButton4.setFocusable(false);
         repairButton4.setBackground(Color.green);
         repairButton4.setVisible(false);
-
 
         // set up game timer
         gameTimer = new JLabel("");
@@ -207,7 +206,7 @@ public class GamePlay implements KeyListener {
         inputField.setVisible(false);
         inputField.setBackground(Color.black);
         inputField.setFocusable(false);
-        //set up a button that toggles the text area on and off
+        // set up a button that toggles the text area on and off
         toggleTextArea = new JButton("Toggle terminal");
         toggleTextArea.addActionListener(this::toggleTyping);
         toggleTextArea.setFocusable(false);
@@ -260,133 +259,160 @@ public class GamePlay implements KeyListener {
     }
 
     private void checkTime(ActionEvent evt) {
-         
+
         if (timeStart) {
             tikCounter++;
             if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world
-                    int randBreak = (int)(Math.random()*300);
-                    if(randBreak==1){
-                        rideBroken1=true;
-                        repairButton1.setBackground(Color.red);
-                    }
-                    else if (randBreak==2){
-                        rideBroken2=true;
-                        repairButton2.setBackground(Color.red);
-                    }
-                    else if (randBreak==3){
-                        rideBroken3=true;
-                        repairButton3.setBackground(Color.red);
-                    }
-                    else if (randBreak==4){
-                        rideBroken4=true;
-                        repairButton4.setBackground(Color.red);
-                    }
+                int randBreak = (int) (Math.random() * 300);
+                if (randBreak == 1) {
+                    rideBroken1 = true;
+                    repairButton1.setBackground(Color.red);
+                } else if (randBreak == 2) {
+                    rideBroken2 = true;
+                    repairButton2.setBackground(Color.red);
+                } else if (randBreak == 3) {
+                    rideBroken3 = true;
+                    repairButton3.setBackground(Color.red);
+                } else if (randBreak == 4) {
+                    rideBroken4 = true;
+                    repairButton4.setBackground(Color.red);
+                }
                 secondCounter++;
             }
-            if (secondCounter>=60){
-                secondCounter-=60; 
+            if (secondCounter >= 60) {
+                secondCounter -= 60;
                 minuteCounter++;
             }
         }
         dialogLabel.setText(currentDialog);
 
-        if (minuteCounter<1){
-        gameTimer.setText("Time: " + secondCounter + "s");
-        }
-        else{
-        gameTimer.setText("Time: " + minuteCounter+ "m:" +secondCounter + "s");    
+        if (minuteCounter < 1) {
+            gameTimer.setText("Time: " + secondCounter + "s");
+        } else {
+            gameTimer.setText("Time: " + minuteCounter + "m:" + secondCounter + "s");
         }
 
-        if (minuteCounter==10){
+        if (minuteCounter == 10) {
             LoseScreen app = new LoseScreen();
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened
         }
 
-        moneyLabel.setText("Debt: "+money+" dollars");
-        switch (dialogScrollNum) {
-            case 1:
-                currentDialog = dialog1;
+        moneyLabel.setText("Debt: " + money + " dollars");
+        if (!startDialogOver) { // starting dialog
+            switch (dialogScrollNum) {
+                case 1:
+                    currentDialog = dialog1;
+                    break;
+                case 2:
+                    currentDialog = dialog2;
+                    break;
+                case 3:
+                    currentDialog = dialog3;
+                    break;
+                case 4:
+                    currentDialog = dialog4;
+                    break;
+                case 5:
+                    currentDialog = dialog5;
+                    break;
+                case 6:
+                    currentDialog = dialog6;
+                    break;
+                case 7:
+                    currentDialog = dialog7;
+                    break;
+                case 8:
+                    currentDialog = dialog8;
+                    break;
+                case 9:
+                    currentDialog = dialog9;
+                    break;
+                case 10:
+                    currentDialog = dialog10;
+                    break;
+                case 11:
+                    currentDialog = dialog11;
+                    break;
+                case 12:
+                    currentDialog = dialog12;
+                    break;
+                case 13:
+                    currentDialog = dialog13;
+                    break;
+                case 14:
+                    currentDialog = dialog14;
+                    moneyLabel.setVisible(true);
+                    break;
+                case 15:
+                    currentDialog = dialog15;
+                    break;
+                case 16:
+                    currentDialog = dialog16;
+                    break;
+                case 17:
+                    currentDialog = dialog17;
+                    break;
+                case 18:
+                    currentDialog = dialog18;
+                    break;
+                case 19:
+                    currentDialog = dialog19;
+                    gougeButton.setVisible(true);
+                    break;
+                case 20:
+                    currentDialog = dialog20;
+                    inputField.setVisible(true);
+                    yesButton.setVisible(true);
+                    noButton.setVisible(true);
+                    toggleTextArea.setVisible(true);
+                    break;
+                case 21:
+                    currentDialog = dialog21;
+                    repairButton1.setVisible(true);
+                    repairButton2.setVisible(true);
+                    repairButton3.setVisible(true);
+                    repairButton4.setVisible(true);
+                    break;
+                case 22:
+                    currentDialog = dialog22;
+                    break;
+                case 23:
+                    currentDialog = dialog23;
+                    timeStart = true;
+                    gameTimer.setVisible(true);
+                    break;
+                    case 24:
+                    startDialogOver = true;
+                    dialogScrollNum = 1;
+                    break;
+            }
+        } else {
+
+            switch (dialogScrollNum) {
+                case 1:
+                    createNewCustomer=true;
+                    currentDialog = userName+": Tickets Please!";
+                    break;
+                case 2: 
+                if (createNewCustomer){
+                    Customer customer = new Customer(); 
+                    currentDialog = customer.customerInfo();
+                    createNewCustomer=false;
+                }
                 break;
-            case 2:
-                currentDialog = dialog2;
+                case 3:
+                if (currentOfferChose){
+                    dialogScrollNum=0;
+                    currentOfferChose=false;
+                }
+                else {
+                    dialogScrollNum=2;
+                }
                 break;
-            case 3:
-                currentDialog = dialog3;
-                break;
-            case 4:
-                currentDialog = dialog4;
-                break;
-            case 5:
-                currentDialog = dialog5;
-                break;
-            case 6:
-                currentDialog = dialog6;
-                break;
-            case 7:
-                currentDialog = dialog7;
-                break;
-            case 8:
-                currentDialog = dialog8;
-                break;
-            case 9:
-                currentDialog = dialog9;
-                break;
-            case 10:
-                currentDialog = dialog10;
-                break;
-            case 11:
-                currentDialog = dialog11;
-                break;
-            case 12:
-                currentDialog = dialog12;
-                break;
-            case 13:
-                currentDialog = dialog13;
-                break;
-            case 14:
-                currentDialog = dialog14;
-                moneyLabel.setVisible(true);
-                break;
-            case 15:
-                currentDialog = dialog15;
-                break;
-            case 16:
-                currentDialog = dialog16;
-                break;
-            case 17:
-                currentDialog = dialog17;
-                break;
-            case 18:
-                currentDialog = dialog18;
-                break;
-            case 19:
-                currentDialog = dialog19;
-                gougeButton.setVisible(true);
-                break;
-            case 20:
-                currentDialog = dialog20;
-                inputField.setVisible(true);
-                yesButton.setVisible(true);
-                noButton.setVisible(true);
-                toggleTextArea.setVisible(true);
-                break;
-            case 21:
-                currentDialog = dialog21;
-                repairButton1.setVisible(true);
-                repairButton2.setVisible(true);
-                repairButton3.setVisible(true);
-                repairButton4.setVisible(true);
-                break;
-            case 22:
-                currentDialog = dialog22;
-                break;
-            case 23:
-                currentDialog = dialog23;
-                timeStart=true;
-                gameTimer.setVisible(true);
-                break;
+            }
         }
+
     }
 
     public void keyPressed(KeyEvent e) {
@@ -403,60 +429,65 @@ public class GamePlay implements KeyListener {
         }
     }
 
-    private void acceptOffer(ActionEvent e){
-
+    private void acceptOffer(ActionEvent e) {
+        dialogScrollNum++;
+        currentOfferChose=true;
     }
 
-    private void toggleTyping (ActionEvent e){
-        if (areaToggled){
+    private void toggleTyping(ActionEvent e) {
+        if (areaToggled) {
             inputField.setBackground(Color.white);
             inputField.setFocusable(true);
             frame.setFocusable(false);
             inputField.requestFocus();
-            areaToggled=false;
-        } else{
+            areaToggled = false;
+        } else {
             inputField.setBackground(Color.black);
             frame.setFocusable(true);
             inputField.setFocusable(false);
             frame.requestFocus();
-            areaToggled=true;
+            areaToggled = true;
         }
     }
 
-    private void denyOffer(ActionEvent e){
+    private void denyOffer(ActionEvent e) {
+        dialogScrollNum++;
+        currentOfferChose=true;
+    }
+
+    private void gouge(ActionEvent e) {
 
     }
 
-    private void gouge(ActionEvent e){
-
-    }
-
-    private void repair1(ActionEvent e){
-        if (rideBroken1){
-        repairButton1.setBackground(Color.green);
-        money-=10000;
-        rideBroken1=false;
+    private void repair1(ActionEvent e) {
+        if (rideBroken1) {
+            repairButton1.setBackground(Color.green);
+            money -= 10000;
+            rideBroken1 = false;
         }
     }
-    private void repair2(ActionEvent e){
-        if (rideBroken2){
-        repairButton2.setBackground(Color.green);
-        money-=12000;
-        rideBroken2=false;
+
+    private void repair2(ActionEvent e) {
+        if (rideBroken2) {
+            repairButton2.setBackground(Color.green);
+            money -= 12000;
+            rideBroken2 = false;
         }
     }
-    private void repair3(ActionEvent e){
-        if (rideBroken3){
-        repairButton3.setBackground(Color.green);
-        money-=15000;
-        rideBroken3=false;
+
+    private void repair3(ActionEvent e) {
+        if (rideBroken3) {
+            repairButton3.setBackground(Color.green);
+            money -= 15000;
+            rideBroken3 = false;
         }
     }
-    private void repair4(ActionEvent e){
-        if (rideBroken4){
-        repairButton4.setBackground(Color.green);
-        money-=20000;
-        rideBroken4=false;
+
+    private void repair4(ActionEvent e) {
+        if (rideBroken4) {
+            repairButton4.setBackground(Color.green);
+            money -= 20000;
+            rideBroken4 = false;
         }
     }
 

@@ -4,7 +4,5 @@ public class Main {
         TicketsPlease app = new TicketsPlease();
         //get info from files
         Customer.setFirstNames();
-        Customer customer = new Customer();
-        System.out.println(customer.customerInfo()); 
     }
 }
