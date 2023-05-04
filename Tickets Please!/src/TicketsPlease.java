@@ -4,20 +4,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JWindow;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class TicketsPlease implements KeyListener{
+
+public class TicketsPlease{
     private JFrame frame;
     private JButton button;
     private JButton denyButton;
@@ -150,7 +146,6 @@ public class TicketsPlease implements KeyListener{
         frame.add(dialog4);
         frame.add(acceptButton);
         frame.add(denyButton);
-        frame.addKeyListener(this);
         frame.getContentPane().setBackground(new Color(191,231,233));
 
         // Display frame.
@@ -187,25 +182,6 @@ public class TicketsPlease implements KeyListener{
 
     private void checkTime(ActionEvent evt){
 
-    }
-
-    public void keyPressed(KeyEvent e) {
-       // System.out.println("Pressed: " + e.getKeyChar());
-        //this.keyPressLabel.setText("Key pressed: " + e.getKeyChar());
-    }
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        switch (e.getKeyChar()) {
-            case ' ':
-                this.label.setText("You pressed space");
-                break;
-     
-        }
     }
     
     }

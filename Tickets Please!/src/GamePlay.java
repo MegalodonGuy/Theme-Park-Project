@@ -79,7 +79,8 @@ public class GamePlay implements KeyListener {
     private int money = -2000000;
     private int deaths =0; 
     private boolean currentOfferChose=false;
-
+    private int customersInPark=0; 
+    private double safteyFactor =15000; // goes up when theme park is less safe, used to vary probability of death, higher is better
     //current customer info
     private String currentFirstName; 
     private String currentLastName;
@@ -284,21 +285,29 @@ public class GamePlay implements KeyListener {
 
         if (timeStart) {
             tikCounter++;
-            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is pretty fast
                 int randBreak = (int) (Math.random() * 300);
-                if (randBreak == 1) {
+                if (randBreak == 1 && !rideBroken1) {
                     rideBroken1 = true;
+                    safteyFactor*=0.9;
                     repairButton1.setBackground(Color.red);
-                } else if (randBreak == 2) {
+                } else if (randBreak == 2 &&!rideBroken2) {
                     rideBroken2 = true;
+                    safteyFactor*=0.8;
                     repairButton2.setBackground(Color.red);
-                } else if (randBreak == 3) {
+                } else if (randBreak == 3 && !rideBroken3) {
                     rideBroken3 = true;
+                    safteyFactor*=0.6;
                     repairButton3.setBackground(Color.red);
-                } else if (randBreak == 4) {
+                } else if (randBreak == 4 &&!rideBroken4) {
                     rideBroken4 = true;
+                    safteyFactor*=0.3;
                     repairButton4.setBackground(Color.red);
                 }
+
+
+                int randDeath = (int)(Math.random() * safteyFactor);
+
                 secondCounter++;
             }
             if (secondCounter >= 60) {
@@ -320,7 +329,7 @@ public class GamePlay implements KeyListener {
             timer.stop(); // real important or the gui will keep being opened
         }
 
-        moneyLabel.setText("Debt: " + money + " dollars");
+        moneyLabel.setText("Debt: " + money*-1 + " dollars");
         deathLabel.setText("Deaths: " + deaths);
 
         if (!startDialogOver) { // starting dialog
@@ -454,6 +463,8 @@ public class GamePlay implements KeyListener {
         if (startDialogOver && dialogScrollNum>=2){
         dialogScrollNum=1;
         money+=currentMoneyCharged;
+        customersInPark++;
+        safteyFactor*=0.95;
         }
     }
 
@@ -487,6 +498,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken1) {
             repairButton1.setBackground(Color.green);
             money -= 10000;
+            safteyFactor/=0.9;
             rideBroken1 = false;
         }
     }
@@ -495,6 +507,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken2) {
             repairButton2.setBackground(Color.green);
             money -= 12000;
+            safteyFactor/=0.8;
             rideBroken2 = false;
         }
     }
@@ -503,6 +516,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken3) {
             repairButton3.setBackground(Color.green);
             money -= 15000;
+            safteyFactor/=0.6;
             rideBroken3 = false;
         }
     }
@@ -511,6 +525,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken4) {
             repairButton4.setBackground(Color.green);
             money -= 20000;
+            safteyFactor/=0.4;
             rideBroken4 = false;
         }
     }
