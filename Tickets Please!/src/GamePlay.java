@@ -126,7 +126,7 @@ public class GamePlay implements KeyListener {
         dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field, don't have it on when accepting tickets, its rude. Thats it, Have fun!";
         dialog23 = userName + ": I need to learn how to start saying no. Welp here comes my first customer...";
         // initiate customer
-        Customer customer = new Customer();
+        Liar customer = new Liar();
 
         timer.start();
         // Set up frame.
@@ -464,7 +464,9 @@ public class GamePlay implements KeyListener {
                     break;
                 case 2:
                     if (createNewCustomer) {
-                        Customer customer = new Customer();
+                        int ranLiar = (int)(Math.random()*6);
+                        if (ranLiar==0){
+                        Liar customer = new Liar();
                         currentDialog = customer.customerInfo();
                         currentLie = customer.getLie();
                         currentAge = customer.getAge();
@@ -489,6 +491,22 @@ public class GamePlay implements KeyListener {
                             currentIDNum = customer.getFakeIDNum();
                         } else if (currentLie.equals("Money")) {
                             currentMoneyCharged = 100;
+                        }
+                        }
+                        else {
+                        TruthCustomer customer = new TruthCustomer();
+                        currentDialog = customer.customerInfo();
+                        currentAge = customer.getAge();
+                        currentFirstName = customer.getFirstName();
+                        currentLastName = customer.getLastName();
+                        currentIDNum = customer.getIDNum();
+                        currentMoneyCharged = customer.getMoneyCharged();
+
+                        realAge = currentAge;
+                        realFirstName = currentFirstName;
+                        realLastName = currentLastName;
+                        realIDNum = currentIDNum;
+                        realMoneyCharged = currentMoneyCharged;
                         }
                         createNewCustomer = false;
                     }

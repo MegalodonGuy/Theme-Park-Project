@@ -2,9 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Customer {
-    private static String[] firstNames = new String[18239];
-    private static String[] lastNames;
+public class Liar {
+    protected static String[] names = new String[18239];
     private String firstName;
     private String lastName;
     private String idNum;
@@ -20,16 +19,16 @@ public class Customer {
     private String lie ="No lie";
     
 
-    public Customer(){
-        int ranFirstName = (int)(Math.random()*firstNames.length); 
-        this.firstName = firstNames[ranFirstName];
-        int ranLastName = (int)(Math.random()*lastNames.length); 
-        this.lastName = lastNames[ranLastName];
+    public Liar(){
+        int ranFirstName = (int)(Math.random()*names.length); 
+        this.firstName = names[ranFirstName];
+        int ranLastName = (int)(Math.random()*names.length); 
+        this.lastName = names[ranLastName];
 
-        int ranFakeFirstName = (int)(Math.random()*firstNames.length); 
-        this.fakeFirstName = firstNames[ranFakeFirstName];
-        int ranFakeLastName = (int)(Math.random()*lastNames.length); 
-        this.fakeLastName = lastNames[ranFakeLastName];
+        int ranFakeFirstName = (int)(Math.random()*names.length); 
+        this.fakeFirstName = names[ranFakeFirstName];
+        int ranFakeLastName = (int)(Math.random()*names.length); 
+        this.fakeLastName = names[ranFakeLastName];
 
         this.idNum=(""+((int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10))); // gets random digit in thousands, hundreds, tens and ones
         this.fakeIDNum=(""+((int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10)+""+(int)(Math.random()*10)));
@@ -54,8 +53,6 @@ public class Customer {
     }
 
     public String customerInfo(){
-        int randLie= (int)(Math.random()*6); // 1 in 6 chnce of a lie
-        if (randLie==0){
             System.out.println("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged);
         int randLie2= (int)(Math.random()*5); // randomizes which lie
             switch(randLie2){
@@ -75,9 +72,9 @@ public class Customer {
                 lie = "Money";
                 return ("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + fakeMoneyCharged);
                 
-            }
+            
         }
-        return ("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged); // if they don't lie
+        return ("This ticket doesn't even remotely look real");
     }
 
     
@@ -114,13 +111,12 @@ public class Customer {
         return lie;
     }
 
-    public static void setFirstNames(){
+    public static void setNames(){
         try (Scanner keyboard = new Scanner(new File("Tickets Please!/src/Names.txt"))) {
             
-            for (int i=0; i<firstNames.length;i++ ){
-                firstNames[i] = keyboard.nextLine();
+            for (int i=0; i<names.length;i++ ){
+                names[i] = keyboard.nextLine();
             }
-            lastNames=firstNames;
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
