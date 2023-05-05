@@ -82,11 +82,10 @@ public class GamePlay implements KeyListener {
     private boolean startDialogOver = false;
     private boolean createNewCustomer = false;
     private String currentDialog;
-    private int money = -1000000;
+    private int money = -150000;
     private int deaths = 0;
-    private boolean currentOfferChose = false;
     private int customersInPark = 0;
-    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death,
+    private double safteyFactor = 15000; // goes down when theme park is less safe, used to vary probability of death,
                                          // higher is better
     // current customer info
     private String currentFirstName;
@@ -120,7 +119,7 @@ public class GamePlay implements KeyListener {
         dialog11 = userName + ": Your business is in shambels, it's obvious.";
         dialog12 = "Ona: Ya we're in severe debt.";
         dialog13 = userName + ": Figured, how much?";
-        dialog14 = "Ona: 1 million dollars ... and 42 pending lawsuits. I got about 10 minutes to pay the debt.";
+        dialog14 = "Ona: 150,000 dollars ... and 22 pending lawsuits. I got about 10 minutes to pay the debt.";
         dialog15 = userName + ": How are you getting out of that?";
         dialog16 = "Ona: By using you of course, you're going to have to cut some corners for me.";
         dialog17 = userName + ": What corners?";
@@ -130,8 +129,6 @@ public class GamePlay implements KeyListener {
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
         dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field, don't have it on when accepting tickets, its rude. Thats it, Have fun!";
         dialog23 = userName + ": I need to learn how to start saying no. Welp here comes my first customer...";
-        // initiate customer
-        Liar customer = new Liar();
 
         timer.start();
         // Set up frame.
@@ -365,9 +362,15 @@ public class GamePlay implements KeyListener {
         }
 
         if (minuteCounter == 10 || deaths == 3) {
-            LoseScreen app = new LoseScreen();
+            EndScreen app = new EndScreen(false);
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened
+        }
+
+        if (money >= 0) {
+            EndScreen app = new EndScreen(true);
+            frame.dispose();
+            timer.stop();
         }
 
         moneyLabel.setText("Debt: " + money * -1 + " dollars");
@@ -543,7 +546,7 @@ public class GamePlay implements KeyListener {
                                 maxScam = 3;
                             }
                         }
-                        createNewCustomer=false;
+                        createNewCustomer = false;
                     }
                     break;
             }
@@ -651,13 +654,16 @@ public class GamePlay implements KeyListener {
      * @param e
      */
     private void gouge(ActionEvent e) {
-        if (maxScam > 0) {
-            currentMoneyCharged += 500;
-            realMoneyCharged += 500;
-            currentDialog="Name: " + currentFirstName + " " + currentLastName + " Age: " + currentAge+ " Ticket ID: " + currentIDNum + " Charge: " + currentMoneyCharged;
-            maxScam--;
-        } else {
-            dialogScrollNum = -1;
+        if (startDialogOver && dialogScrollNum >= 2) {
+            if (maxScam > 0) {
+                currentMoneyCharged += 1000;
+                realMoneyCharged += 1000;
+                currentDialog = "Name: " + currentFirstName + " " + currentLastName + " Age: " + currentAge
+                        + " Ticket ID: " + currentIDNum + " Charge: " + currentMoneyCharged;
+                maxScam--;
+            } else {
+                dialogScrollNum = -1;
+            }
         }
     }
 

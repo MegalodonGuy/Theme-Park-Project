@@ -169,7 +169,7 @@ public class TicketsPlease{
 
     private void deny (ActionEvent event){
         if (event.getSource()==denyButton){
-            LoseScreen app = new LoseScreen();
+            EndScreen app = new EndScreen(false);
             frame.setVisible(false);
         }
     }
