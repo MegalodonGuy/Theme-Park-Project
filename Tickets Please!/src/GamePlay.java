@@ -23,12 +23,13 @@ public class GamePlay implements KeyListener {
     private JFrame frame;
     private String userName;
     private Timer timer = new Timer(50, this::checkTime);
-    private JTextArea inputField;
+    private JTextField inputField;
     private JLabel dialogLabel;
     private JLabel gameTimer;
     private JLabel moneyLabel;
-    private JLabel deathLabel; 
-    private JButton toggleTextArea;
+    private JLabel deathLabel;
+    private JButton toggleTextField;
+    private JButton checkInfo;
 
     private JButton yesButton;
     private JButton noButton;
@@ -64,7 +65,7 @@ public class GamePlay implements KeyListener {
     private String dialog22;
     private String dialog23;
 
-    private boolean areaToggled = true;
+    private boolean fieldToggled = true;
     private int tikCounter = 0;
     private int secondCounter = 0;
     private int minuteCounter = 0;
@@ -77,17 +78,24 @@ public class GamePlay implements KeyListener {
     private boolean createNewCustomer = false;
     private String currentDialog;
     private int money = -2000000;
-    private int deaths =0; 
-    private boolean currentOfferChose=false;
-    private int customersInPark=0; 
-    private double safteyFactor =15000; // goes up when theme park is less safe, used to vary probability of death, higher is better
-    //current customer info
-    private String currentFirstName; 
+    private int deaths = 0;
+    private boolean currentOfferChose = false;
+    private int customersInPark = 0;
+    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death,
+                                         // higher is better
+    // current customer info
+    private String currentFirstName;
     private String currentLastName;
     private String currentIDNum;
     private int currentAge;
-    private int currentMoneyCharged; 
-    private String currentLie; 
+    private int currentMoneyCharged;
+    private String currentLie;
+    // 100% real customer info
+    private String realFirstName;
+    private String realLastName;
+    private String realIDNum;
+    private int realAge;
+    private int realMoneyCharged;
 
     public GamePlay(String name) {
         // set up dialog
@@ -111,12 +119,12 @@ public class GamePlay implements KeyListener {
         dialog17 = userName + ": What corners?";
         dialog18 = "Ona: Safty, ethics and the law. Do what you can to get as much money as possible.";
         dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and price gouge.";
-        dialog20 = "Ona: Use the text area to enter customer names when they come in, their information will appear, you can deny or accept their entrance";
+        dialog20 = "Ona: Use the text field to enter a customers full name or ID to make sure their ticket matches. You can deny or accept their entrance";
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
-        dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field. Thats about it! Have fun I'll be hiding from the law!";
-        dialog23 = userName + ": I need to learn how to start saying no.";
-        //initiate customer
-        Customer customer = new Customer(); 
+        dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field, don't have it on when accepting tickets, its rude. Thats it, Have fun!";
+        dialog23 = userName + ": I need to learn how to start saying no. Welp here comes my first customer...";
+        // initiate customer
+        Customer customer = new Customer();
 
         timer.start();
         // Set up frame.
@@ -186,6 +194,13 @@ public class GamePlay implements KeyListener {
         gougeButton.setContentAreaFilled(false);
         gougeButton.setVisible(false);
 
+        // set up check info button
+        checkInfo = new JButton("Check");
+        checkInfo.addActionListener(this::getTrueInfo);
+        checkInfo.setFocusable(false);
+        checkInfo.setBackground(Color.green);
+        checkInfo.setVisible(false);
+
         // set up repair button 1
         repairButton1 = new JButton("Carousel ($10000)");
         repairButton1.addActionListener(this::repair1);
@@ -222,20 +237,22 @@ public class GamePlay implements KeyListener {
         gameTimer.setOpaque(true);
         gameTimer.setBorder(BorderFactory.createEtchedBorder());
         gameTimer.setVisible(false);
-        // set up input text area
-        inputField = new JTextArea("");
+        // set up input text field
+        inputField = new JTextField("");
         inputField.setPreferredSize(new Dimension(440, 200));
         inputField.setBounds(50, 50, 150, 0);
         inputField.setVisible(false);
         inputField.setBackground(Color.black);
         inputField.setFocusable(false);
-        // set up a button that toggles the text area on and off
-        toggleTextArea = new JButton("Toggle terminal");
-        toggleTextArea.addActionListener(this::toggleTyping);
-        toggleTextArea.setFocusable(false);
-        toggleTextArea.setBackground(Color.blue);
-        toggleTextArea.setForeground(Color.white);
-        toggleTextArea.setVisible(false);
+        inputField.setHorizontalAlignment(SwingConstants.LEFT);
+
+        // set up a button that toggles the text field on and off
+        toggleTextField = new JButton("Toggle terminal");
+        toggleTextField.addActionListener(this::toggleTyping);
+        toggleTextField.setFocusable(false);
+        toggleTextField.setBackground(Color.blue);
+        toggleTextField.setForeground(Color.white);
+        toggleTextField.setVisible(false);
         // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
@@ -247,9 +264,10 @@ public class GamePlay implements KeyListener {
         frame.add(repairButton2);
         frame.add(repairButton3);
         frame.add(repairButton4);
-        frame.add(toggleTextArea);
+        frame.add(toggleTextField);
         frame.add(moneyLabel);
         frame.add(deathLabel);
+        frame.add(checkInfo);
         frame.getContentPane().setBackground(new Color(191, 231, 233));
         frame.addKeyListener(this);
 
@@ -273,10 +291,12 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.WEST, repairButton3, 0, SpringLayout.WEST, repairButton1);
         layout.putConstraint(SpringLayout.SOUTH, repairButton4, 50, SpringLayout.SOUTH, repairButton1);
         layout.putConstraint(SpringLayout.WEST, repairButton4, 200, SpringLayout.WEST, repairButton1);
-        layout.putConstraint(SpringLayout.SOUTH, toggleTextArea, -100, SpringLayout.SOUTH, inputField);
-        layout.putConstraint(SpringLayout.WEST, toggleTextArea, 450, SpringLayout.WEST, inputField);
+        layout.putConstraint(SpringLayout.SOUTH, toggleTextField, -100, SpringLayout.SOUTH, inputField);
+        layout.putConstraint(SpringLayout.WEST, toggleTextField, 450, SpringLayout.WEST, inputField);
         layout.putConstraint(SpringLayout.SOUTH, deathLabel, 20, SpringLayout.SOUTH, moneyLabel);
         layout.putConstraint(SpringLayout.WEST, deathLabel, 0, SpringLayout.WEST, moneyLabel);
+        layout.putConstraint(SpringLayout.SOUTH, checkInfo, 30, SpringLayout.SOUTH, toggleTextField);
+        layout.putConstraint(SpringLayout.WEST, checkInfo, 0, SpringLayout.WEST, toggleTextField);
 
         // Display frame.
         frame.setVisible(true);
@@ -286,36 +306,36 @@ public class GamePlay implements KeyListener {
 
         if (timeStart) {
             tikCounter++;
-            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is pretty fast
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is
+                                        // pretty fast
                 int randBreak = (int) (Math.random() * 300);
                 if (randBreak == 1 && !rideBroken1) {
                     rideBroken1 = true;
-                    safteyFactor*=0.9;
+                    safteyFactor *= 0.9;
                     repairButton1.setBackground(Color.red);
-                } else if (randBreak == 2 &&!rideBroken2) {
+                } else if (randBreak == 2 && !rideBroken2) {
                     rideBroken2 = true;
-                    safteyFactor*=0.8;
+                    safteyFactor *= 0.8;
                     repairButton2.setBackground(Color.red);
                 } else if (randBreak == 3 && !rideBroken3) {
                     rideBroken3 = true;
-                    safteyFactor*=0.6;
+                    safteyFactor *= 0.6;
                     repairButton3.setBackground(Color.red);
-                } else if (randBreak == 4 &&!rideBroken4) {
+                } else if (randBreak == 4 && !rideBroken4) {
                     rideBroken4 = true;
-                    safteyFactor*=0.3;
+                    safteyFactor *= 0.3;
                     repairButton4.setBackground(Color.red);
                 }
-                if (customersInPark>30){
-                safteyFactor*=1.001;  //simulates reduced risk of peiple leaving the park
+                if (customersInPark > 30) {
+                    safteyFactor *= 1.001; // simulates reduced risk of peiple leaving the park
                 }
 
-                int randDeath = (int)(Math.random() * safteyFactor);
+                int randDeath = (int) (Math.random() * safteyFactor);
 
-                if (randDeath==0){
+                if (randDeath == 0) {
                     deaths++;
                 }
                 secondCounter++;
-                System.out.println(safteyFactor);
             }
             if (secondCounter >= 60) {
                 secondCounter -= 60;
@@ -330,13 +350,13 @@ public class GamePlay implements KeyListener {
             gameTimer.setText("Time: " + minuteCounter + "m:" + secondCounter + "s");
         }
 
-        if (minuteCounter == 10 || deaths==3) {
+        if (minuteCounter == 10 || deaths == 3) {
             LoseScreen app = new LoseScreen();
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened
         }
 
-        moneyLabel.setText("Debt: " + money*-1 + " dollars");
+        moneyLabel.setText("Debt: " + money * -1 + " dollars");
         deathLabel.setText("Deaths: " + deaths);
 
         if (!startDialogOver) { // starting dialog
@@ -406,7 +426,8 @@ public class GamePlay implements KeyListener {
                     inputField.setVisible(true);
                     yesButton.setVisible(true);
                     noButton.setVisible(true);
-                    toggleTextArea.setVisible(true);
+                    toggleTextField.setVisible(true);
+                    checkInfo.setVisible(true);
                     break;
                 case 21:
                     currentDialog = dialog21;
@@ -423,7 +444,7 @@ public class GamePlay implements KeyListener {
                     timeStart = true;
                     gameTimer.setVisible(true);
                     break;
-                    case 24:
+                case 24:
                     startDialogOver = true;
                     dialogScrollNum = 1;
                     break;
@@ -432,38 +453,40 @@ public class GamePlay implements KeyListener {
 
             switch (dialogScrollNum) {
                 case 1:
-                    createNewCustomer=true;
-                    currentDialog = userName+": Tickets Please!";
+                    createNewCustomer = true;
+                    currentDialog = userName + ": Tickets Please!";
                     break;
-                case 2: 
-                if (createNewCustomer){
-                    Customer customer = new Customer(); 
-                    currentDialog = customer.customerInfo();
-                    currentLie=customer.getLie(); 
-                    currentAge= customer.getAge();
-                    currentFirstName = customer.getFirstName();
-                    currentLastName = customer.getLastName();
-                    currentIDNum = customer.getIDNum();
-                    currentMoneyCharged = customer.getMoneyCharged();
+                case 2:
+                    if (createNewCustomer) {
+                        Customer customer = new Customer();
+                        currentDialog = customer.customerInfo();
+                        currentLie = customer.getLie();
+                        currentAge = customer.getAge();
+                        currentFirstName = customer.getFirstName();
+                        currentLastName = customer.getLastName();
+                        currentIDNum = customer.getIDNum();
+                        currentMoneyCharged = customer.getMoneyCharged();
 
-                    if (currentLie.equals("First Name")){
-                        currentFirstName=customer.getFakeFirstName();
+                        realAge = currentAge;
+                        realFirstName = currentFirstName;
+                        realLastName = currentLastName;
+                        realIDNum = currentIDNum;
+                        realMoneyCharged = currentMoneyCharged;
+
+                        if (currentLie.equals("First Name")) {
+                            currentFirstName = customer.getFakeFirstName();
+                        } else if (currentLie.equals("Last Name")) {
+                            currentLastName = customer.getFakeLastName();
+                        } else if (currentLie.equals("Age")) {
+                            currentAge = customer.getFakeAge();
+                        } else if (currentLie.equals("ID")) {
+                            currentIDNum = customer.getFakeIDNum();
+                        } else if (currentLie.equals("Money")) {
+                            currentMoneyCharged = 100;
+                        }
+                        createNewCustomer = false;
                     }
-                    else if(currentLie.equals("Last Name")){
-                        currentLastName =customer.getFakeLastName();
-                    }
-                    else if(currentLie.equals("Age")){
-                        currentAge=customer.getFakeAge();
-                    }
-                    else if(currentLie.equals("ID")){
-                        currentIDNum=customer.getFakeIDNum();
-                    }
-                    else if(currentLie.equals("Money")){
-                        currentMoneyCharged=customer.getFakeMoneyCharged();
-                    }
-                    createNewCustomer=false;
-                }
-                break;
+                    break;
             }
         }
 
@@ -484,34 +507,51 @@ public class GamePlay implements KeyListener {
     }
 
     private void acceptOffer(ActionEvent e) {
-        if (startDialogOver && dialogScrollNum>=2){
-        dialogScrollNum=1;
-        money+=currentMoneyCharged;
-        customersInPark++;
-        safteyFactor*=0.99;
+        if (startDialogOver && dialogScrollNum >= 2) {
+            dialogScrollNum = 1;
+            money += currentMoneyCharged;
+            customersInPark++;
+            safteyFactor *= 0.99;
+            inputField.setText("");
+        }
+    }
+
+    private void getTrueInfo(ActionEvent e) {
+        if (!fieldToggled) {
+
+            if (inputField.getText().equals(realFirstName + " " + realLastName)) {
+                inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
+                        + realIDNum + " Initial Charge: " + realMoneyCharged);
+            } else if (inputField.getText().equals(realIDNum)) {
+                inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
+                        + realIDNum + " Initial Charge: " + realMoneyCharged);
+            } else {
+                inputField.setText("Inputed ID or name is not in data base.");
+            }
         }
     }
 
     private void toggleTyping(ActionEvent e) {
-        if (areaToggled) {
+        if (fieldToggled) {
             inputField.setBackground(Color.white);
             inputField.setFocusable(true);
             frame.setFocusable(false);
             inputField.requestFocus();
-            areaToggled = false;
+            fieldToggled = false;
         } else {
             inputField.setBackground(Color.black);
             frame.setFocusable(true);
             inputField.setFocusable(false);
             frame.requestFocus();
-            areaToggled = true;
+            fieldToggled = true;
         }
     }
 
     private void denyOffer(ActionEvent e) {
-        if (startDialogOver && dialogScrollNum>=2){
-            dialogScrollNum=1;
-            }
+        if (startDialogOver && dialogScrollNum >= 2) {
+            dialogScrollNum = 1;
+            inputField.setText("");
+        }
     }
 
     private void gouge(ActionEvent e) {
@@ -522,7 +562,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken1) {
             repairButton1.setBackground(Color.green);
             money -= 10000;
-            safteyFactor/=0.9;
+            safteyFactor /= 0.9;
             rideBroken1 = false;
         }
     }
@@ -531,7 +571,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken2) {
             repairButton2.setBackground(Color.green);
             money -= 12000;
-            safteyFactor/=0.8;
+            safteyFactor /= 0.8;
             rideBroken2 = false;
         }
     }
@@ -540,7 +580,7 @@ public class GamePlay implements KeyListener {
         if (rideBroken3) {
             repairButton3.setBackground(Color.green);
             money -= 15000;
-            safteyFactor/=0.6;
+            safteyFactor /= 0.6;
             rideBroken3 = false;
         }
     }
@@ -549,10 +589,9 @@ public class GamePlay implements KeyListener {
         if (rideBroken4) {
             repairButton4.setBackground(Color.green);
             money -= 20000;
-            safteyFactor/=0.4;
+            safteyFactor /= 0.4;
             rideBroken4 = false;
         }
     }
-
 
 }

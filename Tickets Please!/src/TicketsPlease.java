@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,7 +25,6 @@ public class TicketsPlease{
     private JLabel dialog4;
     private String userName;
     private boolean textAppear1=false; 
-    private Timer timer = new Timer(20, this::checkTime);
     private JTextField nameField;
     public TicketsPlease() {
         // Set up frame.
@@ -180,8 +178,6 @@ public class TicketsPlease{
         }
     }
 
-    private void checkTime(ActionEvent evt){
-
-    }
+    
     
     }
