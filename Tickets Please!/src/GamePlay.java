@@ -19,6 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * JFrame where the main game will take place, does all gameplay gui elements, gameplay variables and uses Customer class when creating its random infinite gameplay loop
+ */
 public class GamePlay implements KeyListener {
     private JFrame frame;
     private String userName;
@@ -77,12 +80,11 @@ public class GamePlay implements KeyListener {
     private boolean startDialogOver = false;
     private boolean createNewCustomer = false;
     private String currentDialog;
-    private int money = -2000000;
+    private int money = -1000000;
     private int deaths = 0;
     private boolean currentOfferChose = false;
     private int customersInPark = 0;
-    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death,
-                                         // higher is better
+    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death, higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
@@ -113,7 +115,7 @@ public class GamePlay implements KeyListener {
         dialog11 = userName + ": Your business is in shambels, it's obvious.";
         dialog12 = "Ona: Ya we're in severe debt.";
         dialog13 = userName + ": Figured, how much?";
-        dialog14 = "Ona: 2 million dollars ... and 42 pending lawsuits. I got about 10 minutes to pay the debt.";
+        dialog14 = "Ona: 1 million dollars ... and 42 pending lawsuits. I got about 10 minutes to pay the debt.";
         dialog15 = userName + ": How are you getting out of that?";
         dialog16 = "Ona: By using you of course, you're going to have to cut some corners for me.";
         dialog17 = userName + ": What corners?";
@@ -302,6 +304,10 @@ public class GamePlay implements KeyListener {
         frame.setVisible(true);
     }
 
+        /**
+         * runs every 50 ms, used as a "act" method
+         * @param evt
+         */
     private void checkTime(ActionEvent evt) {
 
         if (timeStart) {
@@ -499,6 +505,9 @@ public class GamePlay implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * if enter is pressed dialog will scroll to next line
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -506,6 +515,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when accept button is pressed
+     * @param e
+     */
     private void acceptOffer(ActionEvent e) {
         if (startDialogOver && dialogScrollNum >= 2) {
             dialogScrollNum = 1;
@@ -516,6 +529,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when person is looked up in terminal
+     * @param e
+     */
     private void getTrueInfo(ActionEvent e) {
         if (!fieldToggled) {
 
@@ -531,6 +548,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when toggle text button is pressed, important to change focus between field and frame
+     * @param e
+     */
     private void toggleTyping(ActionEvent e) {
         if (fieldToggled) {
             inputField.setBackground(Color.white);
@@ -547,6 +568,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when deny button is pressed
+     * @param e
+     */
     private void denyOffer(ActionEvent e) {
         if (startDialogOver && dialogScrollNum >= 2) {
             dialogScrollNum = 1;
@@ -554,10 +579,18 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when gouge button is pressed
+     * @param e
+     */
     private void gouge(ActionEvent e) {
 
     }
 
+    /**
+     * when repair button 1 is pressed
+     * @param e
+     */
     private void repair1(ActionEvent e) {
         if (rideBroken1) {
             repairButton1.setBackground(Color.green);
@@ -567,6 +600,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when repair button 2 is pressed
+     * @param e
+     */
     private void repair2(ActionEvent e) {
         if (rideBroken2) {
             repairButton2.setBackground(Color.green);
@@ -576,6 +613,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when repair button 3 is pressed
+     * @param e
+     */
     private void repair3(ActionEvent e) {
         if (rideBroken3) {
             repairButton3.setBackground(Color.green);
@@ -585,6 +626,10 @@ public class GamePlay implements KeyListener {
         }
     }
 
+    /**
+     * when repair button 4 is pressed
+     * @param e
+     */
     private void repair4(ActionEvent e) {
         if (rideBroken4) {
             repairButton4.setBackground(Color.green);
