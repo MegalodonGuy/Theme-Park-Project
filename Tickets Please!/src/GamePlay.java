@@ -20,7 +20,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * JFrame where the main game will take place, does all gameplay gui elements, gameplay variables and uses Customer class when creating its random infinite gameplay loop
+ * JFrame where the main game will take place, does all gameplay gui elements,
+ * gameplay variables and uses Customer class when creating its random infinite
+ * gameplay loop
  */
 public class GamePlay implements KeyListener {
     private JFrame frame;
@@ -84,7 +86,8 @@ public class GamePlay implements KeyListener {
     private int deaths = 0;
     private boolean currentOfferChose = false;
     private int customersInPark = 0;
-    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death, higher is better
+    private double safteyFactor = 15000; // goes up when theme park is less safe, used to vary probability of death,
+                                         // higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
@@ -98,6 +101,8 @@ public class GamePlay implements KeyListener {
     private String realIDNum;
     private int realAge;
     private int realMoneyCharged;
+
+    private int maxScam; // max number of scams a person can take before leaving
 
     public GamePlay(String name) {
         // set up dialog
@@ -304,10 +309,11 @@ public class GamePlay implements KeyListener {
         frame.setVisible(true);
     }
 
-        /**
-         * runs every 50 ms, used as a "act" method
-         * @param evt
-         */
+    /**
+     * runs every 50 ms, used as a "act" method
+     * 
+     * @param evt
+     */
     private void checkTime(ActionEvent evt) {
 
         if (timeStart) {
@@ -337,6 +343,8 @@ public class GamePlay implements KeyListener {
                 }
 
                 int randDeath = (int) (Math.random() * safteyFactor);
+
+                money += (int) (customersInPark / 2);
 
                 if (randDeath == 0) {
                     deaths++;
@@ -458,61 +466,84 @@ public class GamePlay implements KeyListener {
         } else {
 
             switch (dialogScrollNum) {
+                case -1:
+                    currentDialog = currentFirstName + ": Screw you theif!";
+                    break;
+                case 0:
+                    dialogScrollNum = 1;
+                    break;
                 case 1:
                     createNewCustomer = true;
                     currentDialog = userName + ": Tickets Please!";
                     break;
                 case 2:
                     if (createNewCustomer) {
-                        int ranLiar = (int)(Math.random()*6);
-                        if (ranLiar==0){
-                        Liar customer = new Liar();
-                        currentDialog = customer.customerInfo();
-                        currentLie = customer.getLie();
-                        currentAge = customer.getAge();
-                        currentFirstName = customer.getFirstName();
-                        currentLastName = customer.getLastName();
-                        currentIDNum = customer.getIDNum();
-                        currentMoneyCharged = customer.getMoneyCharged();
+                        int ranLiar = (int) (Math.random() * 6);
+                        if (ranLiar == 0) {
+                            Liar customer = new Liar();
 
-                        realAge = currentAge;
-                        realFirstName = currentFirstName;
-                        realLastName = currentLastName;
-                        realIDNum = currentIDNum;
-                        realMoneyCharged = currentMoneyCharged;
+                            currentDialog = customer.customerInfo();
+                            currentLie = customer.getLie();
+                            currentAge = customer.getAge();
+                            currentFirstName = customer.getFirstName();
+                            currentLastName = customer.getLastName();
+                            currentIDNum = customer.getIDNum();
+                            currentMoneyCharged = customer.getMoneyCharged();
 
-                        if (currentLie.equals("First Name")) {
-                            currentFirstName = customer.getFakeFirstName();
-                        } else if (currentLie.equals("Last Name")) {
-                            currentLastName = customer.getFakeLastName();
-                        } else if (currentLie.equals("Age")) {
-                            currentAge = customer.getFakeAge();
-                        } else if (currentLie.equals("ID")) {
-                            currentIDNum = customer.getFakeIDNum();
-                        } else if (currentLie.equals("Money")) {
-                            currentMoneyCharged = 100;
+                            realAge = currentAge;
+                            realFirstName = currentFirstName;
+                            realLastName = currentLastName;
+                            realIDNum = currentIDNum;
+                            realMoneyCharged = currentMoneyCharged;
+
+                            if (currentLie.equals("First Name")) {
+                                currentFirstName = customer.getFakeFirstName();
+                            } else if (currentLie.equals("Last Name")) {
+                                currentLastName = customer.getFakeLastName();
+                            } else if (currentLie.equals("Age")) {
+                                currentAge = customer.getFakeAge();
+                            } else if (currentLie.equals("ID")) {
+                                currentIDNum = customer.getFakeIDNum();
+                            } else if (currentLie.equals("Money")) {
+                                currentMoneyCharged = 100;
+                            }
+
+                            if (realAge < 30) {
+                                maxScam = 0;
+                            } else if (realAge < 60) {
+                                maxScam = 1;
+                            } else if (realAge < 90) {
+                                maxScam = 2;
+                            } else {
+                                maxScam = 3;
+                            }
+                        } else {
+                            TruthCustomer customer = new TruthCustomer();
+
+                            currentDialog = customer.customerInfo();
+                            currentAge = customer.getAge();
+                            currentFirstName = customer.getFirstName();
+                            currentLastName = customer.getLastName();
+                            currentIDNum = customer.getIDNum();
+                            currentMoneyCharged = customer.getMoneyCharged();
+
+                            realAge = currentAge;
+                            realFirstName = currentFirstName;
+                            realLastName = currentLastName;
+                            realIDNum = currentIDNum;
+                            realMoneyCharged = currentMoneyCharged;
+
+                            if (realAge < 30) {
+                                maxScam = 0;
+                            } else if (realAge < 60) {
+                                maxScam = 1;
+                            } else if (realAge < 90) {
+                                maxScam = 2;
+                            } else {
+                                maxScam = 3;
+                            }
                         }
-                        }
-                        else {
-                        TruthCustomer customer = new TruthCustomer();
-                        currentDialog = customer.customerInfo();
-                        currentAge = customer.getAge();
-                        currentFirstName = customer.getFirstName();
-                        currentLastName = customer.getLastName();
-                        currentIDNum = customer.getIDNum();
-                        currentMoneyCharged = customer.getMoneyCharged();
-
-                        System.out.println(currentFirstName);
-                        System.out.println(currentLastName);
-                        System.out.println(currentIDNum);
-
-                        realAge = currentAge;
-                        realFirstName = currentFirstName;
-                        realLastName = currentLastName;
-                        realIDNum = currentIDNum;
-                        realMoneyCharged = currentMoneyCharged;
-                        }
-                        createNewCustomer = false;
+                        createNewCustomer=false;
                     }
                     break;
             }
@@ -539,6 +570,7 @@ public class GamePlay implements KeyListener {
 
     /**
      * when accept button is pressed
+     * 
      * @param e
      */
     private void acceptOffer(ActionEvent e) {
@@ -548,14 +580,13 @@ public class GamePlay implements KeyListener {
             safteyFactor *= 0.99;
             inputField.setText("");
 
-            if(realFirstName!=currentFirstName || realLastName!=currentLastName){
+            if (realFirstName != currentFirstName || realLastName != currentLastName) {
                 safteyFactor *= 0.94; // if they have fake name, park is less safe
                 System.out.println("park got less safe");
             }
-            if (realIDNum==currentIDNum){
+            if (realIDNum == currentIDNum) {
                 money += currentMoneyCharged; // get the money if ticket isn't faked
-            }
-            else {
+            } else {
                 System.out.println("you got scammed");
             }
         }
@@ -563,14 +594,11 @@ public class GamePlay implements KeyListener {
 
     /**
      * when person is looked up in terminal
+     * 
      * @param e
      */
     private void getTrueInfo(ActionEvent e) {
         if (!fieldToggled) {
-            System.out.println(realFirstName);
-            System.out.println(realLastName);
-            System.out.println(realIDNum);
-
             if (inputField.getText().equals(realFirstName + " " + realLastName)) {
                 inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
                         + realIDNum + " Initial Charge: " + realMoneyCharged);
@@ -584,7 +612,9 @@ public class GamePlay implements KeyListener {
     }
 
     /**
-     * when toggle text button is pressed, important to change focus between field and frame
+     * when toggle text button is pressed, important to change focus between field
+     * and frame
+     * 
      * @param e
      */
     private void toggleTyping(ActionEvent e) {
@@ -605,6 +635,7 @@ public class GamePlay implements KeyListener {
 
     /**
      * when deny button is pressed
+     * 
      * @param e
      */
     private void denyOffer(ActionEvent e) {
@@ -616,14 +647,23 @@ public class GamePlay implements KeyListener {
 
     /**
      * when gouge button is pressed
+     * 
      * @param e
      */
     private void gouge(ActionEvent e) {
-
+        if (maxScam > 0) {
+            currentMoneyCharged += 500;
+            realMoneyCharged += 500;
+            currentDialog="Name: " + currentFirstName + " " + currentLastName + " Age: " + currentAge+ " Ticket ID: " + currentIDNum + " Charge: " + currentMoneyCharged;
+            maxScam--;
+        } else {
+            dialogScrollNum = -1;
+        }
     }
 
     /**
      * when repair button 1 is pressed
+     * 
      * @param e
      */
     private void repair1(ActionEvent e) {
@@ -637,6 +677,7 @@ public class GamePlay implements KeyListener {
 
     /**
      * when repair button 2 is pressed
+     * 
      * @param e
      */
     private void repair2(ActionEvent e) {
@@ -650,6 +691,7 @@ public class GamePlay implements KeyListener {
 
     /**
      * when repair button 3 is pressed
+     * 
      * @param e
      */
     private void repair3(ActionEvent e) {
@@ -663,6 +705,7 @@ public class GamePlay implements KeyListener {
 
     /**
      * when repair button 4 is pressed
+     * 
      * @param e
      */
     private void repair4(ActionEvent e) {
