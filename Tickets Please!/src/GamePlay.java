@@ -366,7 +366,7 @@ public class GamePlay implements KeyListener {
         deathLabel.setText("Deaths: " + deaths);
 
         if (!startDialogOver) { // starting dialog
-            switch (dialogScrollNum) {
+            switch (dialogScrollNum) { // scroll through dialog with increasing dialog scroll number
                 case 1:
                     currentDialog = dialog1;
                     break;
@@ -502,6 +502,10 @@ public class GamePlay implements KeyListener {
                         currentIDNum = customer.getIDNum();
                         currentMoneyCharged = customer.getMoneyCharged();
 
+                        System.out.println(currentFirstName);
+                        System.out.println(currentLastName);
+                        System.out.println(currentIDNum);
+
                         realAge = currentAge;
                         realFirstName = currentFirstName;
                         realLastName = currentLastName;
@@ -540,10 +544,20 @@ public class GamePlay implements KeyListener {
     private void acceptOffer(ActionEvent e) {
         if (startDialogOver && dialogScrollNum >= 2) {
             dialogScrollNum = 1;
-            money += currentMoneyCharged;
             customersInPark++;
             safteyFactor *= 0.99;
             inputField.setText("");
+
+            if(realFirstName!=currentFirstName || realLastName!=currentLastName){
+                safteyFactor *= 0.94; // if they have fake name, park is less safe
+                System.out.println("park got less safe");
+            }
+            if (realIDNum==currentIDNum){
+                money += currentMoneyCharged; // get the money if ticket isn't faked
+            }
+            else {
+                System.out.println("you got scammed");
+            }
         }
     }
 
@@ -553,6 +567,9 @@ public class GamePlay implements KeyListener {
      */
     private void getTrueInfo(ActionEvent e) {
         if (!fieldToggled) {
+            System.out.println(realFirstName);
+            System.out.println(realLastName);
+            System.out.println(realIDNum);
 
             if (inputField.getText().equals(realFirstName + " " + realLastName)) {
                 inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "

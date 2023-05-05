@@ -11,7 +11,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-
+/**
+ * Initial frame that starts the game, you input your user name and get a little exposition.
+ */
 public class TicketsPlease{
     private JFrame frame;
     private JButton button;

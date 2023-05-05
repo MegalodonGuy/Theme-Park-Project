@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 public class Liar {
     protected static String[] names = new String[18239];
-    private String firstName;
-    private String lastName;
-    private String idNum;
-    private int age;
-    private int moneyCharged;
+    protected String firstName;
+    protected String lastName;
+    protected String idNum;
+    protected int age;
+    protected int moneyCharged;
 
     private static int fakeMoneyCharged = 100; //all liars will go for the lowest charge, other fake values will be randomized like everything else
     private String fakeFirstName;
@@ -53,9 +53,9 @@ public class Liar {
     }
 
     public String customerInfo(){
-            System.out.println("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged);
-        int randLie2= (int)(Math.random()*5); // randomizes which lie
-            switch(randLie2){
+        //System.out.println("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged); //debug 
+            int randLie= (int)(Math.random()*5); // randomizes which lie
+            switch(randLie){
                 case 0: 
                 lie = "First Name";
                 return ("Name: "+this.fakeFirstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged);
