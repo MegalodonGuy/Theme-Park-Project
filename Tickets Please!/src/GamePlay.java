@@ -85,8 +85,7 @@ public class GamePlay implements KeyListener {
     private int money = -150000;
     private int deaths = 0;
     private int customersInPark = 0;
-    private double safteyFactor = 15000; // goes down when theme park is less safe, used to vary probability of death,
-                                         // higher is better
+    private double safteyFactor = 15000; // goes down when theme park is less safe, used to vary probability of death, higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
@@ -522,7 +521,7 @@ public class GamePlay implements KeyListener {
                             }
                         } else {
                             TruthCustomer customer = new TruthCustomer();
-
+                            //uses inheritance to use all these methods, polymorphism for customer info.
                             currentDialog = customer.customerInfo();
                             currentAge = customer.getAge();
                             currentFirstName = customer.getFirstName();

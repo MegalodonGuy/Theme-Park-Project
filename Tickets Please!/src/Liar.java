@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * uses encapsulation by fully encapsualting the idea of a liar, uses abstraction by hiding important instance variables so it doesn't get misused. 
+ */
 public class Liar {
     protected static String[] names = new String[18239];
     protected String firstName;
