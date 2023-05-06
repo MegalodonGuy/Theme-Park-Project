@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+
 /**
  * JFrame where the main game will take place, does all gameplay gui elements,
  * gameplay variables and uses Customer class when creating its random infinite
@@ -112,6 +113,8 @@ public class GamePlay implements KeyListener {
     private String realIDNum;
     private int realAge;
     private int realMoneyCharged;
+
+    private Audio explosion;
 
     private int maxScam; // max number of scams a person can take before leaving
 
@@ -313,7 +316,10 @@ public class GamePlay implements KeyListener {
         fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
         fire4JWindow.pack(); 
         fire4JWindow.setVisible(false);
-
+        //set up sound
+        explosion = new Audio();
+        explosion.setFile("Tickets Please!/src/Explosion+3.wav");
+        
         // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
@@ -376,29 +382,32 @@ public class GamePlay implements KeyListener {
         fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
         if (timeStart) {
             tikCounter++;
-            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is
-                                        // pretty fast
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is// pretty fast
                 int randBreak = (int) (Math.random() * 300);
                 if (randBreak == 1 && !rideBroken1) {
                     rideBroken1 = true;
                     safteyFactor *= 0.9;
                     repairButton1.setBackground(Color.red);
                     fire1JWindow.setVisible(true);
+                    explosion.play();
                 } else if (randBreak == 2 && !rideBroken2) {
                     rideBroken2 = true;
                     safteyFactor *= 0.8;
                     repairButton2.setBackground(Color.red);
                     fire2JWindow.setVisible(true);
+                    explosion.play();
                 } else if (randBreak == 3 && !rideBroken3) {
                     rideBroken3 = true;
                     safteyFactor *= 0.6;
                     repairButton3.setBackground(Color.red);
                     fire3JWindow.setVisible(true);
+                    explosion.play();
                 } else if (randBreak == 4 && !rideBroken4) {
                     rideBroken4 = true;
                     safteyFactor *= 0.3;
                     repairButton4.setBackground(Color.red);
                     fire4JWindow.setVisible(true);
+                    explosion.play();
                 }
                 if (customersInPark > 30) {
                     safteyFactor *= 1.001; // simulates reduced risk of peiple leaving the park
