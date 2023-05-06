@@ -480,8 +480,8 @@ public class GamePlay implements KeyListener {
                     break;
                 case 2:
                     if (createNewCustomer) {
-                        int ranLiar = (int) (Math.random() * 6);
-                        if (ranLiar == 0) {
+                        int ranCharacterType = (int) (Math.random() * 20);
+                        if (ranCharacterType <= 4) {
                             Liar customer = new Liar();
 
                             currentDialog = customer.customerInfo();
@@ -519,7 +519,7 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
-                        } else {
+                        } else if (ranCharacterType>4 &&ranCharacterType<19) {
                             TruthCustomer customer = new TruthCustomer();
                             //uses inheritance to use all these methods, polymorphism for customer info.
                             currentDialog = customer.customerInfo();
@@ -544,6 +544,25 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
+                        }
+                        else{
+                            SpecialCharacters customer = new SpecialCharacters();
+                            
+                            currentDialog = customer.customerInfo();
+
+                            currentAge = customer.getFakeAge();
+                            currentFirstName = customer.getFakeFirstName();
+                            currentLastName = customer.getFakeLastName();
+                            currentIDNum = customer.getFakeIDNum();
+                            currentMoneyCharged=customer.getFakeMoneyCharged();
+
+                            realAge = customer.getAge();
+                            realFirstName = customer.getFirstName();
+                            realLastName = customer.getLastName();
+                            realIDNum = customer.getIDNum();
+                            realMoneyCharged = customer.getMoneyCharged();
+
+                            maxScam=customer.getScamNumber();
                         }
                         createNewCustomer = false;
                     }

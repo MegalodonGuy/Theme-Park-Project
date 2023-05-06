@@ -8,10 +8,6 @@ import java.util.Scanner;
  */
 public class TruthCustomer extends Liar{ 
 
-    public TruthCustomer(){
-        
-    }
-
  @Override
  public String customerInfo(){ //overides the customer info method in liar so it runs differently than just called normally, this is an example of polymorphism
     return ("Name: "+this.firstName +" "+ this.lastName +" Age: " + this.age + " Ticket ID: " + this.idNum + " Initial Charge: " + this.moneyCharged);

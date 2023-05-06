@@ -13,11 +13,11 @@ public class Liar {
     protected int age;
     protected int moneyCharged;
 
-    private static int fakeMoneyCharged = 100; //all liars will go for the lowest charge, other fake values will be randomized like everything else
-    private String fakeFirstName;
-    private String fakeLastName;
-    private String fakeIDNum;
-    private int fakeAge;
+    protected int fakeMoneyCharged = 100; //all liars will go for the lowest charge, other fake values will be randomized like everything else
+    protected String fakeFirstName;
+    protected String fakeLastName;
+    protected String fakeIDNum;
+    protected int fakeAge;
 
     private String lie ="No lie";
     
