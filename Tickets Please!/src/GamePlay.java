@@ -604,13 +604,17 @@ public class GamePlay implements KeyListener {
 
             if (realFirstName != currentFirstName || realLastName != currentLastName) {
                 safteyFactor *= 0.94; // if they have fake name, park is less safe
-                System.out.println("park got less safe");
             }
             if (realIDNum == currentIDNum) {
                 money += realMoneyCharged; // get the money if ticket isn't faked
             } 
-            else {
-                System.out.println("you got scammed");
+
+            if (realFirstName=="James" && realLastName=="Mcguill"){
+                maxDeaths+=2;
+                System.out.println("You got some legal help");
+            } else if(realFirstName=="Jorji" && realLastName=="Costava"){
+                safteyFactor+=3000;
+                System.out.println("Potato man gave his protection");
             }
             money+=currentMoneyCharged-realMoneyCharged; // if you scam them still get that money
         }
@@ -741,10 +745,6 @@ public class GamePlay implements KeyListener {
             safteyFactor /= 0.4;
             rideBroken4 = false;
         }
-    }
-
-    public static void increaseMaxDeaths(int increaseAmount){
-        maxDeaths+=increaseAmount;
     }
 
 }

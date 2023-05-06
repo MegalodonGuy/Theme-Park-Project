@@ -23,7 +23,6 @@ public class SpecialCharacters extends Liar {
             fakeIDNum=idNum;
             scamNumber=0;
             specialDialog ="\"You don't need a criminal lawyer, you need a CRIMINAL lawyer. With me you can get away with more ... accidents\"";
-            GamePlay.increaseMaxDeaths(2);
             character1Appeared=true;
             } 
             break;
