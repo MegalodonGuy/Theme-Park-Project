@@ -84,6 +84,7 @@ public class GamePlay implements KeyListener {
     private String currentDialog;
     private int money = -150000;
     private int deaths = 0;
+    private static int maxDeaths =3;
     private int customersInPark = 0;
     private double safteyFactor = 15000; // goes down when theme park is less safe, used to vary probability of death, higher is better
     // current customer info
@@ -132,7 +133,7 @@ public class GamePlay implements KeyListener {
         timer.start();
         // Set up frame.
         frame = new JFrame("Tickets Please!");
-        frame.setSize(1000, 700);
+        frame.setSize(1050, 700);
         SpringLayout layout = new SpringLayout();
         frame.setLayout(layout);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -275,8 +276,8 @@ public class GamePlay implements KeyListener {
         frame.addKeyListener(this);
 
         // GUI Layout
-        layout.putConstraint(SpringLayout.WEST, moneyLabel, 800, SpringLayout.WEST, gameTimer);
-        layout.putConstraint(SpringLayout.WEST, dialogLabel, 50, SpringLayout.WEST, gameTimer);
+        layout.putConstraint(SpringLayout.WEST, moneyLabel, 900, SpringLayout.WEST, gameTimer);
+        layout.putConstraint(SpringLayout.WEST, dialogLabel, 10, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.WEST, inputField, 400, SpringLayout.WEST, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, inputField, 300, SpringLayout.SOUTH, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, dialogLabel, 50, SpringLayout.SOUTH, gameTimer);
@@ -360,10 +361,10 @@ public class GamePlay implements KeyListener {
             gameTimer.setText("Time: " + minuteCounter + "m:" + secondCounter + "s");
         }
 
-        if (minuteCounter == 10 || deaths == 3) {
+        if (minuteCounter >= 10 || deaths >= maxDeaths) {
             EndScreen app = new EndScreen(false);
             frame.dispose();
-            timer.stop(); // real important or the gui will keep being opened
+            timer.stop(); // real important or the gui will keep being opened...
         }
 
         if (money >= 0) {
@@ -606,10 +607,12 @@ public class GamePlay implements KeyListener {
                 System.out.println("park got less safe");
             }
             if (realIDNum == currentIDNum) {
-                money += currentMoneyCharged; // get the money if ticket isn't faked
-            } else {
+                money += realMoneyCharged; // get the money if ticket isn't faked
+            } 
+            else {
                 System.out.println("you got scammed");
             }
+            money+=currentMoneyCharged-realMoneyCharged; // if you scam them still get that money
         }
     }
 
@@ -622,7 +625,7 @@ public class GamePlay implements KeyListener {
         if (!fieldToggled) {
             if (inputField.getText().equals(realFirstName + " " + realLastName)) {
                 inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
-                        + realIDNum + " Initial Charge: " + realMoneyCharged);
+                        + realIDNum + " Charge: " + realMoneyCharged);
             } else if (inputField.getText().equals(realIDNum)) {
                 inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
                         + realIDNum + " Initial Charge: " + realMoneyCharged);
@@ -675,7 +678,6 @@ public class GamePlay implements KeyListener {
         if (startDialogOver && dialogScrollNum >= 2) {
             if (maxScam > 0) {
                 currentMoneyCharged += 1000;
-                realMoneyCharged += 1000;
                 currentDialog = "Name: " + currentFirstName + " " + currentLastName + " Age: " + currentAge
                         + " Ticket ID: " + currentIDNum + " Charge: " + currentMoneyCharged;
                 maxScam--;
@@ -739,6 +741,10 @@ public class GamePlay implements KeyListener {
             safteyFactor /= 0.4;
             rideBroken4 = false;
         }
+    }
+
+    public static void increaseMaxDeaths(int increaseAmount){
+        maxDeaths+=increaseAmount;
     }
 
 }
