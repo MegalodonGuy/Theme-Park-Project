@@ -35,6 +35,18 @@ public class GamePlay implements KeyListener {
     private JLabel deathLabel;
     private JButton toggleTextField;
     private JButton checkInfo;
+    private JWindow park;
+
+    private JWindow fire1JWindow;
+    private JWindow fire2JWindow;
+    private JWindow fire3JWindow;
+    private JWindow fire4JWindow;
+
+    private JLabel fire1;
+    private JLabel fire2;
+    private JLabel fire3;
+    private JLabel fire4;
+
 
     private JButton yesButton;
     private JButton noButton;
@@ -257,6 +269,51 @@ public class GamePlay implements KeyListener {
         toggleTextField.setBackground(Color.blue);
         toggleTextField.setForeground(Color.white);
         toggleTextField.setVisible(false);
+
+        //set up window that displays the park
+        ImageIcon parkImage = new ImageIcon("Tickets Please!/src/themePark.jpg");
+        JLabel image = new JLabel(parkImage);
+
+        park = new JWindow(frame);
+        park.setSize(390,360);
+        park.add(image);
+        park.setLocation(frame.getX()+10,frame.getY()+310);
+        park.setVisible(true);
+        
+        //set up window that displays the first fire
+        fire1JWindow = new JWindow(park);
+        ImageIcon fire = new ImageIcon("Tickets Please!/src/SmalFire.png");
+        fire1 = new JLabel(fire);
+        fire1JWindow.add(fire1);
+        fire1JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
+        fire1JWindow.setLocation(park.getX()+60, park.getY()-40);
+        fire1JWindow.pack(); 
+        fire1JWindow.setVisible(false);
+        //set up window that displays the second fire
+        fire2JWindow = new JWindow(park);
+        fire2 = new JLabel(fire);
+        fire2JWindow.add(fire2);
+        fire2JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
+        fire2JWindow.setLocation(park.getX()+260, park.getY()-20);
+        fire2JWindow.pack(); 
+        fire2JWindow.setVisible(false);
+        //set up window that displays the third fire
+        fire3JWindow = new JWindow(park);
+        fire3 = new JLabel(fire);
+        fire3JWindow.add(fire3);
+        fire3JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
+        fire3JWindow.setLocation(park.getX()+50, park.getY()+250);
+        fire3JWindow.pack(); 
+        fire3JWindow.setVisible(false);
+        //set up window that displays the fourth fire
+        fire4JWindow = new JWindow(park);
+        fire4 = new JLabel(fire);
+        fire4JWindow.add(fire4);
+        fire4JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
+        fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
+        fire4JWindow.pack(); 
+        fire4JWindow.setVisible(false);
+
         // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
@@ -282,7 +339,7 @@ public class GamePlay implements KeyListener {
         layout.putConstraint(SpringLayout.SOUTH, inputField, 300, SpringLayout.SOUTH, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, dialogLabel, 50, SpringLayout.SOUTH, gameTimer);
         layout.putConstraint(SpringLayout.SOUTH, yesButton, 50, SpringLayout.SOUTH, inputField);
-        layout.putConstraint(SpringLayout.WEST, yesButton, 0, SpringLayout.WEST, inputField);
+        layout.putConstraint(SpringLayout.WEST, yesButton, 10, SpringLayout.WEST, inputField);
         layout.putConstraint(SpringLayout.WEST, noButton, 100, SpringLayout.WEST, yesButton);
         layout.putConstraint(SpringLayout.SOUTH, noButton, 0, SpringLayout.SOUTH, yesButton);
         layout.putConstraint(SpringLayout.WEST, gougeButton, 100, SpringLayout.WEST, noButton);
@@ -312,7 +369,11 @@ public class GamePlay implements KeyListener {
      * @param evt
      */
     private void checkTime(ActionEvent evt) {
-
+        park.setLocation(frame.getX()+10,frame.getY()+290);
+        fire1JWindow.setLocation(park.getX()+60, park.getY()-40);
+        fire2JWindow.setLocation(park.getX()+260, park.getY()-20);
+        fire3JWindow.setLocation(park.getX()+50, park.getY()+250);
+        fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
         if (timeStart) {
             tikCounter++;
             if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is
@@ -322,18 +383,22 @@ public class GamePlay implements KeyListener {
                     rideBroken1 = true;
                     safteyFactor *= 0.9;
                     repairButton1.setBackground(Color.red);
+                    fire1JWindow.setVisible(true);
                 } else if (randBreak == 2 && !rideBroken2) {
                     rideBroken2 = true;
                     safteyFactor *= 0.8;
                     repairButton2.setBackground(Color.red);
+                    fire2JWindow.setVisible(true);
                 } else if (randBreak == 3 && !rideBroken3) {
                     rideBroken3 = true;
                     safteyFactor *= 0.6;
                     repairButton3.setBackground(Color.red);
+                    fire3JWindow.setVisible(true);
                 } else if (randBreak == 4 && !rideBroken4) {
                     rideBroken4 = true;
                     safteyFactor *= 0.3;
                     repairButton4.setBackground(Color.red);
+                    fire4JWindow.setVisible(true);
                 }
                 if (customersInPark > 30) {
                     safteyFactor *= 1.001; // simulates reduced risk of peiple leaving the park
@@ -520,7 +585,7 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
-                        } else if (ranCharacterType>4 &&ranCharacterType<19) {
+                        } else if (ranCharacterType>4 &&ranCharacterType<17) {
                             TruthCustomer customer = new TruthCustomer();
                             //uses inheritance to use all these methods, polymorphism for customer info.
                             currentDialog = customer.customerInfo();
@@ -702,6 +767,7 @@ public class GamePlay implements KeyListener {
             money -= 10000;
             safteyFactor /= 0.9;
             rideBroken1 = false;
+            fire1JWindow.setVisible(false);
         }
     }
 
@@ -716,6 +782,7 @@ public class GamePlay implements KeyListener {
             money -= 12000;
             safteyFactor /= 0.8;
             rideBroken2 = false;
+            fire2JWindow.setVisible(false);
         }
     }
 
@@ -730,6 +797,7 @@ public class GamePlay implements KeyListener {
             money -= 15000;
             safteyFactor /= 0.6;
             rideBroken3 = false;
+            fire3JWindow.setVisible(false);
         }
     }
 
@@ -744,6 +812,7 @@ public class GamePlay implements KeyListener {
             money -= 20000;
             safteyFactor /= 0.4;
             rideBroken4 = false;
+            fire4JWindow.setVisible(false);
         }
     }
 
