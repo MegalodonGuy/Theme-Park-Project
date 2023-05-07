@@ -116,6 +116,7 @@ public class GamePlay implements KeyListener {
 
     private Audio explosion;
     private Audio music;
+    private Audio saulIntro;
     private int maxScam; // max number of scams a person can take before leaving
 
     public GamePlay(String name) {
@@ -651,6 +652,12 @@ public class GamePlay implements KeyListener {
                             realMoneyCharged = customer.getMoneyCharged();
 
                             maxScam=customer.getScamNumber();
+
+                            if (realFirstName=="James"){
+                                saulIntro = new Audio();
+                                saulIntro.setFile("Tickets Please!/src/BCS.wav");
+                                saulIntro.play();
+                            }
                         }
                         createNewCustomer = false;
                     }
