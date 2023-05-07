@@ -1,5 +1,6 @@
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
 
 public class Audio {
     Clip clip;
@@ -17,4 +18,5 @@ public class Audio {
     public void play() {
         clip.start();
     }
+
 }

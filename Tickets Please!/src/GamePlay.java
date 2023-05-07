@@ -115,7 +115,7 @@ public class GamePlay implements KeyListener {
     private int realMoneyCharged;
 
     private Audio explosion;
-
+    private Audio music;
     private int maxScam; // max number of scams a person can take before leaving
 
     public GamePlay(String name) {
@@ -313,13 +313,13 @@ public class GamePlay implements KeyListener {
         fire4 = new JLabel(fire);
         fire4JWindow.add(fire4);
         fire4JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
-        fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
+        fire4JWindow.setLocation(park.getX()+200, park.getY()+120);
         fire4JWindow.pack(); 
         fire4JWindow.setVisible(false);
-        //set up sound
-        explosion = new Audio();
-        explosion.setFile("Tickets Please!/src/Explosion+3.wav");
-        
+        //set up music 
+        music = new Audio();
+        music.setFile("Tickets Please!/src/fsm-team-escp-patchwork.wav");
+        music.play();
         // add to frame
         frame.add(inputField);
         frame.add(gameTimer);
@@ -379,9 +379,14 @@ public class GamePlay implements KeyListener {
         fire1JWindow.setLocation(park.getX()+60, park.getY()-40);
         fire2JWindow.setLocation(park.getX()+260, park.getY()-20);
         fire3JWindow.setLocation(park.getX()+50, park.getY()+250);
-        fire4JWindow.setLocation(park.getX()+200, park.getY()+100);
+        fire4JWindow.setLocation(park.getX()+200, park.getY()+120);
         if (timeStart) {
             tikCounter++;
+            if (tikCounter % 3600==0){//length of song, loops it
+                music = new Audio();
+                music.setFile("Tickets Please!/src/fsm-team-escp-patchwork.wav");
+                music.play();
+            }
             if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is// pretty fast
                 int randBreak = (int) (Math.random() * 300);
                 if (randBreak == 1 && !rideBroken1) {
@@ -389,24 +394,32 @@ public class GamePlay implements KeyListener {
                     safteyFactor *= 0.9;
                     repairButton1.setBackground(Color.red);
                     fire1JWindow.setVisible(true);
+                    explosion = new Audio();
+                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
                     explosion.play();
                 } else if (randBreak == 2 && !rideBroken2) {
                     rideBroken2 = true;
                     safteyFactor *= 0.8;
                     repairButton2.setBackground(Color.red);
                     fire2JWindow.setVisible(true);
+                    explosion = new Audio();
+                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
                     explosion.play();
                 } else if (randBreak == 3 && !rideBroken3) {
                     rideBroken3 = true;
                     safteyFactor *= 0.6;
                     repairButton3.setBackground(Color.red);
                     fire3JWindow.setVisible(true);
+                    explosion = new Audio();
+                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
                     explosion.play();
                 } else if (randBreak == 4 && !rideBroken4) {
                     rideBroken4 = true;
                     safteyFactor *= 0.3;
                     repairButton4.setBackground(Color.red);
                     fire4JWindow.setVisible(true);
+                    explosion = new Audio();
+                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
                     explosion.play();
                 }
                 if (customersInPark > 30) {
