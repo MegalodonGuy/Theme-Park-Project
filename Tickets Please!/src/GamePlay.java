@@ -117,6 +117,7 @@ public class GamePlay implements KeyListener {
     private Audio explosion;
     private Audio music;
     private Audio saulIntro;
+    private Audio jorjiIntro;
     private int maxScam; // max number of scams a person can take before leaving
 
     public GamePlay(String name) {
@@ -143,7 +144,7 @@ public class GamePlay implements KeyListener {
         dialog19 = "Ona: When customers come in, charge an extra fee, when rides are unsafe, run them anyway. Evaluate risk and price gouge.";
         dialog20 = "Ona: Use the text field to enter a customers full name or ID to make sure their ticket matches. You can deny or accept their entrance";
         dialog21 = "Ona: Use the buttons on the side to repair rides when they turn red, it will still run unrepaired but have an increase chance of a minor fatal oopsie";
-        dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field, don't have it on when accepting tickets, its rude. Thats it, Have fun!";
+        dialog22 = "Ona: Also use the toggle terminal button to use or stop using the text field, don't have it on when accepting tickets, it's rude. Thats it, Have fun!";
         dialog23 = userName + ": I need to learn how to start saying no. Welp here comes my first customer...";
 
         timer.start();
@@ -565,12 +566,12 @@ public class GamePlay implements KeyListener {
                     break;
                 case 1:
                     createNewCustomer = true;
-                    currentDialog = userName + ": Tickets Please!";
+                    currentDialog = userName + ": Ticket Please!";
                     break;
                 case 2:
                     if (createNewCustomer) {
                         int ranCharacterType = (int) (Math.random() * 20);
-                        if (ranCharacterType <= 4) {
+                        if (ranCharacterType <= 5) {
                             Liar customer = new Liar();
 
                             currentDialog = customer.customerInfo();
@@ -608,7 +609,7 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
-                        } else if (ranCharacterType>4 &&ranCharacterType<17) {
+                        } else if (ranCharacterType>5 &&ranCharacterType<17) {
                             TruthCustomer customer = new TruthCustomer();
                             //uses inheritance to use all these methods, polymorphism for customer info.
                             currentDialog = customer.customerInfo();
@@ -658,6 +659,11 @@ public class GamePlay implements KeyListener {
                                 saulIntro.setFile("Tickets Please!/src/BCS.wav");
                                 saulIntro.play();
                             }
+                            if (realFirstName=="Jorji"){
+                                jorjiIntro = new Audio();
+                                jorjiIntro.setFile("Tickets Please!/src/speech-announce.wav");
+                                jorjiIntro.play();
+                            }
                         }
                         createNewCustomer = false;
                     }
@@ -697,7 +703,9 @@ public class GamePlay implements KeyListener {
             inputField.setText("");
 
             if (realFirstName != currentFirstName || realLastName != currentLastName) {
-                safteyFactor *= 0.94; // if they have fake name, park is less safe
+                if (currentIDNum!="7777" && currentIDNum!="3467+1"){
+                safteyFactor *= 0.90; // if they have fake name, park is less safe
+                }
             }
             if (realIDNum == currentIDNum) {
                 money += realMoneyCharged; // get the money if ticket isn't faked
