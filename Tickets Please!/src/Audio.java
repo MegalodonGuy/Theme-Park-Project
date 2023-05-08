@@ -19,4 +19,14 @@ public class Audio {
         clip.start();
     }
 
+    public void stop() {
+        try {
+            sound.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clip.close();
+        clip.stop();
+    }
+
 }

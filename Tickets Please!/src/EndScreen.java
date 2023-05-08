@@ -6,11 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
-
+// frame players will go when game is done
 public class EndScreen {
     private JFrame frame;
     private JLabel endLabel;
-
+    private Audio music;
     /**
      * false if you want player to lose true for win
      * @param win
@@ -18,9 +18,11 @@ public class EndScreen {
     public EndScreen(boolean win){
         if (!win){
         frame = new JFrame("Lose Screen");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
-        
-
+        music = new Audio();
+        music.setFile("Tickets Please!/src/alex-productions-horror.wav");
+        music.play();
         endLabel= new JLabel("You go home and try to forget about what just happened"); 
         Dimension labelSize = endLabel.getPreferredSize();
         endLabel.setFont(new Font("Papyrus", Font.PLAIN, 45));
@@ -34,9 +36,12 @@ public class EndScreen {
         frame.pack(); 
         frame.setVisible(true);
         } else{
-            frame = new JFrame("Win Screen");
+        frame = new JFrame("Win Screen");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
-        
+        music = new Audio();
+        music.setFile("Tickets Please!/src/ron-gelinas-chillout-lounge-pursuit.wav");
+        music.play();
 
         endLabel= new JLabel("You just bailed a criminal out by commiting more crime, you win?"); 
         Dimension labelSize = endLabel.getPreferredSize();

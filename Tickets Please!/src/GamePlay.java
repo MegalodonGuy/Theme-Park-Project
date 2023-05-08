@@ -95,7 +95,7 @@ public class GamePlay implements KeyListener {
     private boolean startDialogOver = false;
     private boolean createNewCustomer = false;
     private String currentDialog;
-    private int money = -150000;
+    private int money = -15000;
     private int deaths = 0;
     private static int maxDeaths =3;
     private int customersInPark = 0;
@@ -451,12 +451,14 @@ public class GamePlay implements KeyListener {
         }
 
         if (minuteCounter >= 10 || deaths >= maxDeaths) {
+            music.stop();
             EndScreen app = new EndScreen(false);
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened...
         }
 
         if (money >= 0) {
+            music.stop();
             EndScreen app = new EndScreen(true);
             frame.dispose();
             timer.stop();
