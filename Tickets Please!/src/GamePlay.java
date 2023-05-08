@@ -462,7 +462,7 @@ public class GamePlay implements KeyListener {
         }
 
         moneyLabel.setText("Debt: " + money * -1 + " dollars");
-        deathLabel.setText("Deaths: " + deaths);
+        deathLabel.setText("Deaths: " + deaths +"/"+maxDeaths);
 
         if (!startDialogOver) { // starting dialog
             switch (dialogScrollNum) { // scroll through dialog with increasing dialog scroll number
