@@ -99,7 +99,7 @@ public class GamePlay implements KeyListener {
     private int deaths = 0;
     private static int maxDeaths =3;
     private int customersInPark = 0;
-    private double safteyFactor = 15000; // goes down when theme park is less safe, used to vary probability of death, higher is better
+    private double safteyFactor = 150000; // goes down when theme park is less safe, used to vary probability of death, higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
