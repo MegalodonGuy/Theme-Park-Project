@@ -1,4 +1,5 @@
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -20,6 +21,8 @@ public class EndScreen {
         frame = new JFrame("Lose Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
+        ImageIcon icon = new ImageIcon("Tickets Please!/src/icon.png");
+        frame.setIconImage(icon.getImage());
         music = new Audio();
         music.setFile("Tickets Please!/src/alex-productions-horror.wav");
         music.play();
@@ -39,6 +42,8 @@ public class EndScreen {
         frame = new JFrame("Win Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
+        ImageIcon icon = new ImageIcon("Tickets Please!/src/icon.png");
+        frame.setIconImage(icon.getImage());
         music = new Audio();
         music.setFile("Tickets Please!/src/ron-gelinas-chillout-lounge-pursuit.wav");
         music.play();

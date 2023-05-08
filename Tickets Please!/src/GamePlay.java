@@ -3,19 +3,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -95,7 +90,7 @@ public class GamePlay implements KeyListener {
     private boolean startDialogOver = false;
     private boolean createNewCustomer = false;
     private String currentDialog;
-    private int money = -15000;
+    private int money = -150000;
     private int deaths = 0;
     private static int maxDeaths =3;
     private int customersInPark = 0;
@@ -452,14 +447,14 @@ public class GamePlay implements KeyListener {
 
         if (minuteCounter >= 10 || deaths >= maxDeaths) {
             music.stop();
-            EndScreen app = new EndScreen(false);
+            new EndScreen(false);
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened...
         }
 
         if (money >= 0) {
             music.stop();
-            EndScreen app = new EndScreen(true);
+            new EndScreen(true);
             frame.dispose();
             timer.stop();
         }
@@ -706,7 +701,7 @@ public class GamePlay implements KeyListener {
 
             if (realFirstName != currentFirstName || realLastName != currentLastName) {
                 if (currentIDNum!="7777" && currentIDNum!="3467+1"){
-                safteyFactor *= 0.90; // if they have fake name, park is less safe
+                safteyFactor *= 0.85; // if they have fake name, park is less safe
                 }
             }
             if (realIDNum == currentIDNum) {

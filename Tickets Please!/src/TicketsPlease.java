@@ -26,7 +26,6 @@ public class TicketsPlease{
     private JLabel dialog3; 
     private JLabel dialog4;
     private String userName;
-    private boolean textAppear1=false; 
     private JTextField nameField;
     public TicketsPlease() {
         // Set up frame.
@@ -152,7 +151,7 @@ public class TicketsPlease{
         frame.setVisible(true);
     }
 
-    private void submitName (ActionEvent event) {
+    private void submitName (ActionEvent event) { //saves username, new dialog appears
         if (event.getSource()==button){
             userName=nameField.getText(); 
             dialog2.setText("Ona: Hi "+ userName+", you're hired!");
@@ -169,13 +168,13 @@ public class TicketsPlease{
 
     private void deny (ActionEvent event){
         if (event.getSource()==denyButton){
-            EndScreen app = new EndScreen(false);
+            new EndScreen(false);
             frame.setVisible(false);
         }
     }
     private void accept (ActionEvent event){
         if (event.getSource()==acceptButton){
-            GamePlay app= new GamePlay(userName);
+            new GamePlay(userName);
             frame.setVisible(false);
         }
     }

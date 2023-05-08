@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
 
 /**
  *  uses inheratance by using many values and methods in the liar class and saves code by using a mian class
