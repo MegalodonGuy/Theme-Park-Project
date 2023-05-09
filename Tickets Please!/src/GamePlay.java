@@ -18,9 +18,12 @@ import java.awt.event.KeyListener;
  * JFrame where the main game will take place, does all gameplay gui elements,
  * gameplay variables and uses Customer class when creating its random infinite
  * gameplay loop
+ * 
+ * Uses both encapsuation and abstraction by encasulating a world that determines gameplay and abstracting instance variables
+ * by privating them
  */
 public class GamePlay implements KeyListener {
-    private JFrame frame;
+    private JFrame frame; // make GUI components
     private String userName;
     private Timer timer = new Timer(50, this::checkTime);
     private JTextField inputField;
@@ -51,6 +54,7 @@ public class GamePlay implements KeyListener {
     private JButton repairButton3;
     private JButton repairButton4;
 
+    // make dialog variables
     private int dialogScrollNum = 1;
     private String dialog1;
     private String dialog2;
@@ -76,6 +80,7 @@ public class GamePlay implements KeyListener {
     private String dialog22;
     private String dialog23;
 
+    // make gameplay variables
     private boolean fieldToggled = true;
     private int tikCounter = 0;
     private int secondCounter = 0;
@@ -92,8 +97,7 @@ public class GamePlay implements KeyListener {
     private int deaths = 0;
     private static int maxDeaths = 3;
     private int customersInPark = 0;
-    private double safteyFactor = 150000; // goes down when theme park is less safe, used to vary probability of death,
-                                          // higher is better
+    private double safteyFactor = 150000; // goes down when theme park is less safe, used to vary probability of death, higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
@@ -108,6 +112,7 @@ public class GamePlay implements KeyListener {
     private int realAge;
     private int realMoneyCharged;
 
+    //make audio
     private Audio explosion;
     private Audio music;
     private Audio saulIntro;
@@ -371,20 +376,22 @@ public class GamePlay implements KeyListener {
      * @param evt
      */
     private void checkTime(ActionEvent evt) {
+        // set window locations
         park.setLocation(frame.getX() + 10, frame.getY() + 290);
         fire1JWindow.setLocation(park.getX() + 60, park.getY() - 40);
         fire2JWindow.setLocation(park.getX() + 260, park.getY() - 20);
         fire3JWindow.setLocation(park.getX() + 50, park.getY() + 250);
         fire4JWindow.setLocation(park.getX() + 200, park.getY() + 120);
-        if (timeStart) {
+
+        if (timeStart) { // start counter
             tikCounter++;
             if (tikCounter % 3600 == 0) {// length of song, loops it
                 music = new Audio();
                 music.setFile("Tickets Please!/src/fsm-team-escp-patchwork.wav");
                 music.play();
             }
-            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world.
-
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20ms in a perfect world. counst seconds
+                //randomly break rides
                 int randBreak = (int) (Math.random() * 300);
                 if (randBreak == 1 && !rideBroken1) {
                     destroyRide(1);
@@ -399,8 +406,9 @@ public class GamePlay implements KeyListener {
                     safteyFactor *= 1.001; // simulates reduced risk of peiple leaving the park
                 }
 
+                //randomly dictates death on safty amount
                 int randDeath = (int) (Math.random() * safteyFactor);
-
+                //passive income
                 money += (int) (customersInPark / 2);
 
                 if (randDeath == 0) {
@@ -408,11 +416,12 @@ public class GamePlay implements KeyListener {
                 }
                 secondCounter++;
             }
-            if (secondCounter >= 60) {
+            if (secondCounter >= 60) { 
                 secondCounter -= 60;
                 minuteCounter++;
             }
         }
+        //set dialog to current dialog 
         dialogLabel.setText(currentDialog);
 
         if (minuteCounter < 1) {
@@ -421,21 +430,21 @@ public class GamePlay implements KeyListener {
             gameTimer.setText("Time: " + minuteCounter + "m:" + secondCounter + "s");
         }
 
-        if (minuteCounter >= 10 || deaths >= maxDeaths) {
+        if (minuteCounter >= 10 || deaths >= maxDeaths) { // lose
             music.stop();
             new EndScreen(false);
             frame.dispose();
             timer.stop(); // real important or the gui will keep being opened...
         }
 
-        if (money >= 0) {
+        if (money >= 0) { // win
             music.stop();
             new EndScreen(true);
             frame.dispose();
             timer.stop();
         }
 
-        moneyLabel.setText("Debt: " + money * -1 + " dollars");
+        moneyLabel.setText("Debt: " + money * -1 + " dollars"); // display debt and deaths
         deathLabel.setText("Deaths: " + deaths + "/" + maxDeaths);
 
         if (!startDialogOver) { // starting dialog
@@ -530,7 +539,7 @@ public class GamePlay implements KeyListener {
             }
         } else {
 
-            switch (dialogScrollNum) {
+            switch (dialogScrollNum) { // restart dialog for infinite gameplay loop
                 case -1:
                     currentDialog = currentFirstName + ": Screw you theif!";
                     break;
@@ -543,10 +552,10 @@ public class GamePlay implements KeyListener {
                     break;
                 case 2:
                     if (createNewCustomer) {
-                        int ranCharacterType = (int) (Math.random() * 20);
+                        int ranCharacterType = (int) (Math.random() * 20); // chance between all types of customers
                         if (ranCharacterType <= 5) {
                             Liar customer = new Liar();
-
+                            //set values for gameplay class to use
                             currentDialog = customer.customerInfo();
                             currentLie = customer.getLie();
                             currentAge = customer.getAge();
@@ -561,6 +570,7 @@ public class GamePlay implements KeyListener {
                             realIDNum = currentIDNum;
                             realMoneyCharged = currentMoneyCharged;
 
+                            //  find the lie
                             if (currentLie.equals("First Name")) {
                                 currentFirstName = customer.getFakeFirstName();
                             } else if (currentLie.equals("Last Name")) {
@@ -658,7 +668,7 @@ public class GamePlay implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-            dialogScrollNum++;
+            dialogScrollNum++; // scroll through dialog when enter is pressed
         }
     }
 
@@ -689,7 +699,7 @@ public class GamePlay implements KeyListener {
             } else if (realFirstName == "Jorji" && realLastName == "Costava") {
                 safteyFactor += 3000;
                 System.out.println("Potato man gave his protection");
-            } else if (realFirstName == "I" && realLastName == "Bomb") {
+            } else if (realFirstName == "I" && realLastName == "Bomb") { // punishment for letting this one through
                 deaths+=1;
                 if (rideBroken1){
                     deaths++;
@@ -708,7 +718,7 @@ public class GamePlay implements KeyListener {
                 destroyRide(3);
                 destroyRide(4);
             }
-            money += currentMoneyCharged - realMoneyCharged; // if you scam them still get that money
+            money += currentMoneyCharged - realMoneyCharged; // if you scam them still get scammedthat money
         }
     }
 
@@ -717,7 +727,7 @@ public class GamePlay implements KeyListener {
      * 
      * @param e
      */
-    private void getTrueInfo(ActionEvent e) {
+    private void getTrueInfo(ActionEvent e) { // get customer info but only gets true ones
         if (!fieldToggled) {
             if (inputField.getText().equals(realFirstName + " " + realLastName)) {
                 inputField.setText("Name: " + realFirstName + " " + realLastName + " Age: " + realAge + " Ticket ID: "
@@ -737,7 +747,7 @@ public class GamePlay implements KeyListener {
      * 
      * @param e
      */
-    private void toggleTyping(ActionEvent e) {
+    private void toggleTyping(ActionEvent e) { // toggle text field
         if (fieldToggled) {
             inputField.setBackground(Color.white);
             inputField.setFocusable(true);
@@ -758,7 +768,7 @@ public class GamePlay implements KeyListener {
      * 
      * @param e
      */
-    private void denyOffer(ActionEvent e) {
+    private void denyOffer(ActionEvent e) { // shoo customer away and start next one
         if (startDialogOver && dialogScrollNum >= 2) {
             dialogScrollNum = 1;
             inputField.setText("");
@@ -772,7 +782,7 @@ public class GamePlay implements KeyListener {
      */
     private void gouge(ActionEvent e) {
         if (startDialogOver && dialogScrollNum >= 2) {
-            if (maxScam > 0) {
+            if (maxScam > 0) { // get money, can do it until max scam reached then customer leaves
                 currentMoneyCharged += 1000;
                 currentDialog = "Name: " + currentFirstName + " " + currentLastName + " Age: " + currentAge
                         + " Ticket ID: " + currentIDNum + " Charge: " + currentMoneyCharged;
@@ -789,7 +799,7 @@ public class GamePlay implements KeyListener {
      * @param e
      */
     private void repair1(ActionEvent e) {
-        if (rideBroken1) {
+        if (rideBroken1) { // repair ride
             repairButton1.setBackground(Color.green);
             money -= 5000;
             safteyFactor /= 0.9;
@@ -804,7 +814,7 @@ public class GamePlay implements KeyListener {
      * @param e
      */
     private void repair2(ActionEvent e) {
-        if (rideBroken2) {
+        if (rideBroken2) {// repair ride
             repairButton2.setBackground(Color.green);
             money -= 6000;
             safteyFactor /= 0.8;
@@ -819,7 +829,7 @@ public class GamePlay implements KeyListener {
      * @param e
      */
     private void repair3(ActionEvent e) {
-        if (rideBroken3) {
+        if (rideBroken3) {// repair ride
             repairButton3.setBackground(Color.green);
             money -= 7500;
             safteyFactor /= 0.6;
@@ -834,7 +844,7 @@ public class GamePlay implements KeyListener {
      * @param e
      */
     private void repair4(ActionEvent e) {
-        if (rideBroken4) {
+        if (rideBroken4) {// repair ride
             repairButton4.setBackground(Color.green);
             money -= 10000;
             safteyFactor /= 0.4;
@@ -847,7 +857,7 @@ public class GamePlay implements KeyListener {
      * the ride you want to break
      * @param rideNum
      */
-    private void destroyRide (int rideNum){
+    private void destroyRide (int rideNum){ // break specified ride
         if (rideNum==1){
             rideBroken1 = true;
             fire1JWindow.setVisible(true);
@@ -868,7 +878,7 @@ public class GamePlay implements KeyListener {
             fire4JWindow.setVisible(true);
             repairButton4.setBackground(Color.red);
         }
-        explosion = new Audio();
+        explosion = new Audio(); // make sound go boom
         explosion.setFile("Tickets Please!/src/Explosion+3.wav");
         explosion.play();
     }
