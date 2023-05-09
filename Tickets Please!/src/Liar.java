@@ -19,7 +19,7 @@ public class Liar {
     protected String fakeIDNum;
     protected int fakeAge;
 
-    private String lie ="No lie";
+    protected String lie ="No lie";
     
 
     public Liar(){
