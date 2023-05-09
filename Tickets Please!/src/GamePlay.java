@@ -690,11 +690,23 @@ public class GamePlay implements KeyListener {
                 safteyFactor += 3000;
                 System.out.println("Potato man gave his protection");
             } else if (realFirstName == "I" && realLastName == "Bomb") {
+                deaths+=1;
+                if (rideBroken1){
+                    deaths++;
+                }
+                if(rideBroken2){
+                    deaths++;
+                }
+                if(rideBroken3){
+                    deaths++;
+                }
+                if(rideBroken4){
+                    deaths++;
+                }
                 destroyRide(1);
                 destroyRide(2);
                 destroyRide(3);
                 destroyRide(4);
-                deaths++;
             }
             money += currentMoneyCharged - realMoneyCharged; // if you scam them still get that money
         }

@@ -64,7 +64,7 @@ public class SpecialCharacters extends Liar {
                     fakeIDNum= idNum;
                     fakeMoneyCharged=300;
         
-                    scamNumber=1; 
+                    scamNumber=3; 
                     specialDialog ="";
             break;
         }  
