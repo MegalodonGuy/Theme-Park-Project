@@ -88,7 +88,7 @@ public class GamePlay implements KeyListener {
     private boolean startDialogOver = false;
     private boolean createNewCustomer = false;
     private String currentDialog;
-    private int money = -150000;
+    private int money = -100000;
     private int deaths = 0;
     private static int maxDeaths = 3;
     private int customersInPark = 0;
@@ -130,7 +130,7 @@ public class GamePlay implements KeyListener {
         dialog11 = userName + ": Your business is in shambels, it's obvious.";
         dialog12 = "Ona: Ya we're in severe debt.";
         dialog13 = userName + ": Figured, how much?";
-        dialog14 = "Ona: 150,000 dollars ... and 22 pending lawsuits. I got about 10 minutes to pay the debt.";
+        dialog14 = "Ona: 100,000 dollars ... and 22 pending lawsuits. I got about 10 minutes to pay the debt.";
         dialog15 = userName + ": How are you getting out of that?";
         dialog16 = "Ona: By using you of course, you're going to have to cut some corners for me.";
         dialog17 = userName + ": What corners?";
@@ -217,25 +217,25 @@ public class GamePlay implements KeyListener {
         checkInfo.setVisible(false);
 
         // set up repair button 1
-        repairButton1 = new JButton("Carousel ($10000)");
+        repairButton1 = new JButton("Carousel ($5000)");
         repairButton1.addActionListener(this::repair1);
         repairButton1.setFocusable(false);
         repairButton1.setBackground(Color.green);
         repairButton1.setVisible(false);
         // set up repair button 2
-        repairButton2 = new JButton("Whirly Gig ($12000)");
+        repairButton2 = new JButton("Whirly Gig ($6000)");
         repairButton2.addActionListener(this::repair2);
         repairButton2.setFocusable(false);
         repairButton2.setBackground(Color.green);
         repairButton2.setVisible(false);
         // set up repair button 3
-        repairButton3 = new JButton("Improper Dropper ($15000)");
+        repairButton3 = new JButton("Improper Dropper ($7500)");
         repairButton3.addActionListener(this::repair3);
         repairButton3.setFocusable(false);
         repairButton3.setBackground(Color.green);
         repairButton3.setVisible(false);
         // set up repair button 4
-        repairButton4 = new JButton("Destined Death ($20000)");
+        repairButton4 = new JButton("Destined Death ($10000)");
         repairButton4.addActionListener(this::repair4);
         repairButton4.setFocusable(false);
         repairButton4.setBackground(Color.green);
@@ -791,7 +791,7 @@ public class GamePlay implements KeyListener {
     private void repair1(ActionEvent e) {
         if (rideBroken1) {
             repairButton1.setBackground(Color.green);
-            money -= 10000;
+            money -= 5000;
             safteyFactor /= 0.9;
             rideBroken1 = false;
             fire1JWindow.setVisible(false);
@@ -806,7 +806,7 @@ public class GamePlay implements KeyListener {
     private void repair2(ActionEvent e) {
         if (rideBroken2) {
             repairButton2.setBackground(Color.green);
-            money -= 12000;
+            money -= 6000;
             safteyFactor /= 0.8;
             rideBroken2 = false;
             fire2JWindow.setVisible(false);
@@ -821,7 +821,7 @@ public class GamePlay implements KeyListener {
     private void repair3(ActionEvent e) {
         if (rideBroken3) {
             repairButton3.setBackground(Color.green);
-            money -= 15000;
+            money -= 7500;
             safteyFactor /= 0.6;
             rideBroken3 = false;
             fire3JWindow.setVisible(false);
@@ -836,7 +836,7 @@ public class GamePlay implements KeyListener {
     private void repair4(ActionEvent e) {
         if (rideBroken4) {
             repairButton4.setBackground(Color.green);
-            money -= 20000;
+            money -= 10000;
             safteyFactor /= 0.4;
             rideBroken4 = false;
             fire4JWindow.setVisible(false);
