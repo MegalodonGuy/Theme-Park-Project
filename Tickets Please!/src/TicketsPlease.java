@@ -158,7 +158,7 @@ public class TicketsPlease{
             dialog2.setVisible(true);
             dialog3.setText(userName+": It's that easy?");
             dialog3.setVisible(true);
-            dialog4.setText("Ona: Oh ya we're severly understaffed, We will see you tomorrow! You will be covering the role of the receptionist, mechanic and ride operator!");
+            dialog4.setText("Ona: Oh ya we're severely understaffed, We will see you tomorrow! You will be covering the role of the receptionist, mechanic and ride operator!");
             dialog4.setVisible(true);
             denyButton.setVisible(true);
             acceptButton.setVisible(true);

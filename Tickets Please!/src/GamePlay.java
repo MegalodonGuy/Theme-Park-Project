@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 /**
  * JFrame where the main game will take place, does all gameplay gui elements,
  * gameplay variables and uses Customer class when creating its random infinite
@@ -42,7 +41,6 @@ public class GamePlay implements KeyListener {
     private JLabel fire2;
     private JLabel fire3;
     private JLabel fire4;
-
 
     private JButton yesButton;
     private JButton noButton;
@@ -92,9 +90,10 @@ public class GamePlay implements KeyListener {
     private String currentDialog;
     private int money = -150000;
     private int deaths = 0;
-    private static int maxDeaths =3;
+    private static int maxDeaths = 3;
     private int customersInPark = 0;
-    private double safteyFactor = 150000; // goes down when theme park is less safe, used to vary probability of death, higher is better
+    private double safteyFactor = 150000; // goes down when theme park is less safe, used to vary probability of death,
+                                          // higher is better
     // current customer info
     private String currentFirstName;
     private String currentLastName;
@@ -270,50 +269,50 @@ public class GamePlay implements KeyListener {
         toggleTextField.setForeground(Color.white);
         toggleTextField.setVisible(false);
 
-        //set up window that displays the park
+        // set up window that displays the park
         ImageIcon parkImage = new ImageIcon("Tickets Please!/src/themePark.jpg");
         JLabel image = new JLabel(parkImage);
 
         park = new JWindow(frame);
-        park.setSize(390,360);
+        park.setSize(390, 360);
         park.add(image);
-        park.setLocation(frame.getX()+10,frame.getY()+310);
+        park.setLocation(frame.getX() + 10, frame.getY() + 310);
         park.setVisible(true);
-        
-        //set up window that displays the first fire
+
+        // set up window that displays the first fire
         fire1JWindow = new JWindow(park);
         ImageIcon fire = new ImageIcon("Tickets Please!/src/SmalFire.png");
         fire1 = new JLabel(fire);
         fire1JWindow.add(fire1);
         fire1JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
-        fire1JWindow.setLocation(park.getX()+60, park.getY()-40);
-        fire1JWindow.pack(); 
+        fire1JWindow.setLocation(park.getX() + 60, park.getY() - 40);
+        fire1JWindow.pack();
         fire1JWindow.setVisible(false);
-        //set up window that displays the second fire
+        // set up window that displays the second fire
         fire2JWindow = new JWindow(park);
         fire2 = new JLabel(fire);
         fire2JWindow.add(fire2);
         fire2JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
-        fire2JWindow.setLocation(park.getX()+260, park.getY()-20);
-        fire2JWindow.pack(); 
+        fire2JWindow.setLocation(park.getX() + 260, park.getY() - 20);
+        fire2JWindow.pack();
         fire2JWindow.setVisible(false);
-        //set up window that displays the third fire
+        // set up window that displays the third fire
         fire3JWindow = new JWindow(park);
         fire3 = new JLabel(fire);
         fire3JWindow.add(fire3);
         fire3JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
-        fire3JWindow.setLocation(park.getX()+50, park.getY()+250);
-        fire3JWindow.pack(); 
+        fire3JWindow.setLocation(park.getX() + 50, park.getY() + 250);
+        fire3JWindow.pack();
         fire3JWindow.setVisible(false);
-        //set up window that displays the fourth fire
+        // set up window that displays the fourth fire
         fire4JWindow = new JWindow(park);
         fire4 = new JLabel(fire);
         fire4JWindow.add(fire4);
         fire4JWindow.setBackground(new Color(0, 0, 0, 0)); // set to transparent
-        fire4JWindow.setLocation(park.getX()+200, park.getY()+120);
-        fire4JWindow.pack(); 
+        fire4JWindow.setLocation(park.getX() + 200, park.getY() + 120);
+        fire4JWindow.pack();
         fire4JWindow.setVisible(false);
-        //set up music 
+        // set up music
         music = new Audio();
         music.setFile("Tickets Please!/src/fsm-team-escp-patchwork.wav");
         music.play();
@@ -372,52 +371,29 @@ public class GamePlay implements KeyListener {
      * @param evt
      */
     private void checkTime(ActionEvent evt) {
-        park.setLocation(frame.getX()+10,frame.getY()+290);
-        fire1JWindow.setLocation(park.getX()+60, park.getY()-40);
-        fire2JWindow.setLocation(park.getX()+260, park.getY()-20);
-        fire3JWindow.setLocation(park.getX()+50, park.getY()+250);
-        fire4JWindow.setLocation(park.getX()+200, park.getY()+120);
+        park.setLocation(frame.getX() + 10, frame.getY() + 290);
+        fire1JWindow.setLocation(park.getX() + 60, park.getY() - 40);
+        fire2JWindow.setLocation(park.getX() + 260, park.getY() - 20);
+        fire3JWindow.setLocation(park.getX() + 50, park.getY() + 250);
+        fire4JWindow.setLocation(park.getX() + 200, park.getY() + 120);
         if (timeStart) {
             tikCounter++;
-            if (tikCounter % 3600==0){//length of song, loops it
+            if (tikCounter % 3600 == 0) {// length of song, loops it
                 music = new Audio();
                 music.setFile("Tickets Please!/src/fsm-team-escp-patchwork.wav");
                 music.play();
             }
-            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world but 50 ms refresh rate is// pretty fast
+            if (tikCounter % 16 == 0) { // account for lag :\, should be 20 in a perfect world.
+
                 int randBreak = (int) (Math.random() * 300);
                 if (randBreak == 1 && !rideBroken1) {
-                    rideBroken1 = true;
-                    safteyFactor *= 0.9;
-                    repairButton1.setBackground(Color.red);
-                    fire1JWindow.setVisible(true);
-                    explosion = new Audio();
-                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
-                    explosion.play();
+                    destroyRide(1);
                 } else if (randBreak == 2 && !rideBroken2) {
-                    rideBroken2 = true;
-                    safteyFactor *= 0.8;
-                    repairButton2.setBackground(Color.red);
-                    fire2JWindow.setVisible(true);
-                    explosion = new Audio();
-                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
-                    explosion.play();
+                    destroyRide(2);
                 } else if (randBreak == 3 && !rideBroken3) {
-                    rideBroken3 = true;
-                    safteyFactor *= 0.6;
-                    repairButton3.setBackground(Color.red);
-                    fire3JWindow.setVisible(true);
-                    explosion = new Audio();
-                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
-                    explosion.play();
+                    destroyRide(3);
                 } else if (randBreak == 4 && !rideBroken4) {
-                    rideBroken4 = true;
-                    safteyFactor *= 0.3;
-                    repairButton4.setBackground(Color.red);
-                    fire4JWindow.setVisible(true);
-                    explosion = new Audio();
-                    explosion.setFile("Tickets Please!/src/Explosion+3.wav");
-                    explosion.play();
+                    destroyRide(4);
                 }
                 if (customersInPark > 30) {
                     safteyFactor *= 1.001; // simulates reduced risk of peiple leaving the park
@@ -460,7 +436,7 @@ public class GamePlay implements KeyListener {
         }
 
         moneyLabel.setText("Debt: " + money * -1 + " dollars");
-        deathLabel.setText("Deaths: " + deaths +"/"+maxDeaths);
+        deathLabel.setText("Deaths: " + deaths + "/" + maxDeaths);
 
         if (!startDialogOver) { // starting dialog
             switch (dialogScrollNum) { // scroll through dialog with increasing dialog scroll number
@@ -606,9 +582,9 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
-                        } else if (ranCharacterType>5 &&ranCharacterType<17) {
+                        } else if (ranCharacterType > 5 && ranCharacterType < 17) {
                             TruthCustomer customer = new TruthCustomer();
-                            //uses inheritance to use all these methods, polymorphism for customer info.
+                            // uses inheritance to use all these methods, polymorphism for customer info.
                             currentDialog = customer.customerInfo();
                             currentAge = customer.getAge();
                             currentFirstName = customer.getFirstName();
@@ -631,17 +607,16 @@ public class GamePlay implements KeyListener {
                             } else {
                                 maxScam = 3;
                             }
-                        }
-                        else{
+                        } else {
                             SpecialCharacters customer = new SpecialCharacters();
-                            
+
                             currentDialog = customer.customerInfo();
 
                             currentAge = customer.getFakeAge();
                             currentFirstName = customer.getFakeFirstName();
                             currentLastName = customer.getFakeLastName();
                             currentIDNum = customer.getFakeIDNum();
-                            currentMoneyCharged=customer.getFakeMoneyCharged();
+                            currentMoneyCharged = customer.getFakeMoneyCharged();
 
                             realAge = customer.getAge();
                             realFirstName = customer.getFirstName();
@@ -649,14 +624,14 @@ public class GamePlay implements KeyListener {
                             realIDNum = customer.getIDNum();
                             realMoneyCharged = customer.getMoneyCharged();
 
-                            maxScam=customer.getScamNumber();
+                            maxScam = customer.getScamNumber();
 
-                            if (realFirstName=="James"){
+                            if (realFirstName == "James") {
                                 saulIntro = new Audio();
                                 saulIntro.setFile("Tickets Please!/src/BCS.wav");
                                 saulIntro.play();
                             }
-                            if (realFirstName=="Jorji"){
+                            if (realFirstName == "Jorji") {
                                 jorjiIntro = new Audio();
                                 jorjiIntro.setFile("Tickets Please!/src/speech-announce.wav");
                                 jorjiIntro.play();
@@ -700,22 +675,28 @@ public class GamePlay implements KeyListener {
             inputField.setText("");
 
             if (realFirstName != currentFirstName || realLastName != currentLastName) {
-                if (currentIDNum!="7777" && currentIDNum!="3467+1"){
-                safteyFactor *= 0.85; // if they have fake name, park is less safe
+                if (currentIDNum != "7777" && currentIDNum != "3467+1") {
+                    safteyFactor *= 0.85; // if they have fake name, park is less safe
                 }
             }
             if (realIDNum == currentIDNum) {
                 money += realMoneyCharged; // get the money if ticket isn't faked
-            } 
-
-            if (realFirstName=="James" && realLastName=="Mcguill"){
-                maxDeaths+=2;
-                System.out.println("You got some legal help");
-            } else if(realFirstName=="Jorji" && realLastName=="Costava"){
-                safteyFactor+=3000;
-                System.out.println("Potato man gave his protection");
             }
-            money+=currentMoneyCharged-realMoneyCharged; // if you scam them still get that money
+
+            if (realFirstName == "James" && realLastName == "Mcguill") {
+                maxDeaths += 2;
+                System.out.println("You got some legal help");
+            } else if (realFirstName == "Jorji" && realLastName == "Costava") {
+                safteyFactor += 3000;
+                System.out.println("Potato man gave his protection");
+            } else if (realFirstName == "I" && realLastName == "Bomb") {
+                destroyRide(1);
+                destroyRide(2);
+                destroyRide(3);
+                destroyRide(4);
+                deaths++;
+            }
+            money += currentMoneyCharged - realMoneyCharged; // if you scam them still get that money
         }
     }
 
@@ -848,6 +829,36 @@ public class GamePlay implements KeyListener {
             rideBroken4 = false;
             fire4JWindow.setVisible(false);
         }
+    }
+
+    /**
+     * the ride you want to break
+     * @param rideNum
+     */
+    private void destroyRide (int rideNum){
+        if (rideNum==1){
+            rideBroken1 = true;
+            fire1JWindow.setVisible(true);
+            repairButton1.setBackground(Color.red);
+        }
+        else if(rideNum==2){
+            rideBroken2 = true;
+            fire2JWindow.setVisible(true);
+            repairButton2.setBackground(Color.red);
+        }
+        else if (rideNum==3){
+            rideBroken3 = true;
+            fire3JWindow.setVisible(true);
+            repairButton3.setBackground(Color.red);
+        }
+        else if (rideNum==4){
+            rideBroken4 = true;
+            fire4JWindow.setVisible(true);
+            repairButton4.setBackground(Color.red);
+        }
+        explosion = new Audio();
+        explosion.setFile("Tickets Please!/src/Explosion+3.wav");
+        explosion.play();
     }
 
 }

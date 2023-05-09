@@ -17,7 +17,7 @@ public class EndScreen {
      * @param win
      */
     public EndScreen(boolean win){
-        if (!win){
+        if (!win){ //lose screen 
         frame = new JFrame("Lose Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
@@ -38,7 +38,7 @@ public class EndScreen {
         frame.add(endLabel);
         frame.pack(); 
         frame.setVisible(true);
-        } else{
+        } else{ //win screen 
         frame = new JFrame("Win Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());

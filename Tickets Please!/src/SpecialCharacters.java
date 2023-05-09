@@ -1,5 +1,5 @@
 public class SpecialCharacters extends Liar {
-    private int specialCharacterAmount=2;
+    private int specialCharacterAmount=3;
     private int scamNumber; // amount a time a character can be scammed important for saul since he is "old" but would never be scammed.
     private String specialDialog;
     private static boolean character1Appeared=false; 
@@ -52,8 +52,22 @@ public class SpecialCharacters extends Liar {
                 isSpecial=false;
             }
             break;
-        }
+            case 2:
+             // used to punish people who admit people without checking, can show up as many times as he wants, set all returned values to real random character but has an obvious naem when looked up
+                    isSpecial=true;
+                    
+                    firstName = "I";
+                    lastName="Bomb"; 
+                    moneyCharged =300;
+                    
+                    fakeAge=age;
+                    fakeIDNum= idNum;
+                    fakeMoneyCharged=300;
         
+                    scamNumber=1; 
+                    specialDialog ="";
+            break;
+        }  
     }
 
     @Override
